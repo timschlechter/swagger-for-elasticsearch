@@ -164,7 +164,7 @@ path.logs: target/elasticsearch/logs
 
 # Path to where plugins are installed:
 #
-#path.plugins: /path/to/plugins
+path.plugins:  target/elasticsearch/plugins
 
 
 #################################### Plugin ###################################

@@ -15,4 +15,13 @@
             </excludes>
         </dependencySet>
     </dependencySets>
+    <fileSets>
+        <fileSet>
+            <directory>${basedir}/swagger-ui</directory>
+            <outputDirectory>/_site</outputDirectory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
 </assembly>

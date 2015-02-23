@@ -23,7 +23,7 @@ public class ApiDeclarationHandler extends SwaggerRequestHandler {
     @Inject
     public ApiDeclarationHandler(Settings settings, Client client, RestController controller) {
         super(settings, controller, client);
-        controller.registerHandler(GET, PLUGIN_PATH + "/api-docs/{resource}", this);
+        controller.registerHandler(GET, API_DOCS_PATH + "/{resource}", this);
     }
 
     @Override
@@ -43,10 +43,12 @@ public class ApiDeclarationHandler extends SwaggerRequestHandler {
 
     private static List<Api> getApis(String resource) {
         switch (resource) {
-            case "_mapping":
+            case "Mappings":
                 return getMappingApis();
-            case "_aliases":
+            case "Aliases":
                 return getAliasesApis();
+            case "Indices":
+                return getIndexApis();
         }
         
         return asList();
@@ -71,6 +73,31 @@ public class ApiDeclarationHandler extends SwaggerRequestHandler {
         );
     }
 
+    private static List<Api> getIndexApis() {
+        return asList(
+            new Api(
+                "/{name}",
+                "",
+                asList(
+                    new Operation(
+                        "string",
+                        HttpMethod.PUT,
+                        "The create index API allows to instantiate an index.",
+                        null,
+                        "createIndex",
+                        asList(
+                            new Parameter(
+                                "string",
+                                ParameterType.path,
+                                "name",
+                                "Index name",
+                                true)
+                        )
+                    )
+                )
+            )
+        );
+    }
     private static List<Api> getMappingApis() {
         return asList(
             new Api(
