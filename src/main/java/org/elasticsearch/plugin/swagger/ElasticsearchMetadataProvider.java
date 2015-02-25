@@ -1,10 +1,7 @@
 package org.elasticsearch.plugin.swagger;
 
-import net.itimothy.rest.metadata.model.HttpMethod;
 import net.itimothy.rest.metadata.MetadataProvider;
-import net.itimothy.rest.metadata.model.Parameter;
-import net.itimothy.rest.metadata.model.ParameterType;
-import net.itimothy.rest.metadata.model.Route;
+import net.itimothy.rest.metadata.model.*;
 
 import java.util.List;
 
@@ -26,7 +23,22 @@ public class ElasticsearchMetadataProvider implements MetadataProvider
     public List<Route> getRoutes() {
         return asList(
             Route.builder()
-                .resourcePath("Mapping")
+                .resourcePath("Indices")
+                .method(HttpMethod.PUT)
+                .apiPath("{index}")
+                .name("createIndex")
+                .parameters(asList(
+                    Parameter.builder()
+                        .paramType(ParameterType.PATH)
+                        .model(Primitive.STRING)
+                        .name("index")
+                        .build()
+                ))
+                .build(),
+
+
+            Route.builder()
+                .resourcePath("Mappings")
                 .method(HttpMethod.GET)
                 .apiPath("_mapping")
                 .name("getMapping")
@@ -34,15 +46,25 @@ public class ElasticsearchMetadataProvider implements MetadataProvider
                 .build(),
 
             Route.builder()
-                .resourcePath("Mapping")
+                .resourcePath("Mappings")
                 .method(HttpMethod.PUT)
                 .parameters(asList(
+                    Parameter.builder()
+                        .paramType(ParameterType.PATH)
+                        .model(Primitive.STRING)
+                        .name("index")
+                        .build(),
+                    Parameter.builder()
+                        .paramType(ParameterType.PATH)
+                        .model(Primitive.STRING)
+                        .name("type")
+                        .build(),
                     Parameter.builder()
                         .paramType(ParameterType.BODY)
                         .model(ModelManager.MAPPING)
                         .build()
                 ))
-                .apiPath("_mapping")
+                .apiPath("{index}/_mapping/{type}")
                 .name("putMapping")
                 .model(ModelManager.MAPPING)
                 .build()

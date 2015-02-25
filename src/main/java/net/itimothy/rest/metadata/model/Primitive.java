@@ -4,15 +4,16 @@ import lombok.Getter;
 
 @Getter
 public class Primitive extends Model {
-    public static final Primitive Integer = new Primitive("integer", "integer", "int32");
-    public static final Primitive Long = new Primitive("long", "integer", "int64");
-    public static final Primitive Float = new Primitive("float", "number", "int64");
-    public static final Primitive Double = new Primitive("double", "number", "int64");
-    public static final Primitive String = new Primitive("string", "string", null);
-    public static final Primitive Byte = new Primitive("byte", "string", "byte");
-    public static final Primitive Boolean = new Primitive("boolean", "boolean", null);
-    public static final Primitive Date = new Primitive("date", "string", "date");
-    public static final Primitive DateTime = new Primitive("dateTime", "string", "date-time");
+    public static final Primitive VOID = new Primitive("void", "void", null);
+    public static final Primitive INTEGER = new Primitive("integer", "integer", "int32");
+    public static final Primitive LONG = new Primitive("long", "integer", "int64");
+    public static final Primitive FLOAT = new Primitive("float", "number", "int64");
+    public static final Primitive DOULBE = new Primitive("double", "number", "int64");
+    public static final Primitive STRING = new Primitive("string", "string", null);
+    public static final Primitive BYTE = new Primitive("byte", "string", "byte");
+    public static final Primitive BOOLEAN = new Primitive("boolean", "boolean", null);
+    public static final Primitive DATE = new Primitive("date", "string", "date");
+    public static final Primitive DATETIME = new Primitive("dateTime", "string", "date-time");
 
     private final String id;
     private String type;
