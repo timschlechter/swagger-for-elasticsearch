@@ -1,15 +1,15 @@
 package org.elasticsearch.plugin.swagger;
 
 import org.elasticsearch.common.inject.AbstractModule;
-import org.elasticsearch.plugin.swagger.v1_2.rest.ApiDeclarationHandler;
-import org.elasticsearch.plugin.swagger.v1_2.rest.ResourceListHandler;
+import org.elasticsearch.plugin.swagger.rest.ApiDeclarationRequestHandler;
+import org.elasticsearch.plugin.swagger.rest.ResourceListingRequestHandler;
 
 public class SwaggerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(ResourceListHandler.class).asEagerSingleton();
-        bind(ApiDeclarationHandler.class).asEagerSingleton();
+        bind(ResourceListingRequestHandler.class).asEagerSingleton();
+        bind(ApiDeclarationRequestHandler.class).asEagerSingleton();
     }
 
 }
