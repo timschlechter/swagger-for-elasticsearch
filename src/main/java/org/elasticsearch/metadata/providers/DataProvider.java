@@ -50,11 +50,11 @@ class DataProvider {
     
     public List<String> getAllIndicesAliasesAndWildcardExpessions() {
         List<String> result = new ArrayList<>();
-        
-        result.add("*");
+
         result.addAll(getAllIndices());
         result.addAll(getAllAliases());
         result.sort(Comparator.comparing(s -> s));
+        result.add("*");
         
         return result;        
     }

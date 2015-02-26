@@ -64,6 +64,7 @@ public class SwaggerMetadataConverter {
             .type(route.getModel() == null ? "void" : route.getModel().getId())
             .method(convert(route.getMethod()))
             .summary(route.getDescription())
+            .notes(route.getNotes())
             .nickname(toNickname(route))
             .parameters(toParameters(route.getParameters()))
             .responseMessages(toResponseMessages(route.getResponses()))
