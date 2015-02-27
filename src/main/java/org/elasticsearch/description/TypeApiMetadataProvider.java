@@ -37,26 +37,26 @@ public class TypeApiMetadataProvider extends ElasticSearchMetadataProvider {
         ));
 
         result.addAll(
-            this.getDataProvider().getAllDocumentTypes().stream()
-                .map(t -> asList(
+            this.getDataProvider().getMapping(getIndexOrAlias()).stream()
+                .map(m -> asList(
                     Route.builder()
-                        .group(getDefaultGroup() + ": " + t)
+                        .group(getDefaultGroup() + ": " + m.getType())
                         .method(HttpMethod.POST)
-                        .apiPath(indexOrAliasPrepended(t))
+                        .apiPath(indexOrAliasPrepended(m.getType()))
                         .parameters(asList(
                             Parameter.builder()
                                 .paramType(ParameterType.BODY)
-                                .model(ModelsCatalog.OBJECT).build()
+                                .model(getModelsCatalog().getModel(getIndexOrAlias(), m.getType())).build()
                         )).build(),
-                    
+
                     Route.builder()
-                        .group(getDefaultGroup() + ": " + t)
+                        .group(getDefaultGroup() + ": " + m.getType())
                         .method(HttpMethod.GET)
-                        .apiPath(indexOrAliasPrepended(t + "/{id}"))
+                        .apiPath(indexOrAliasPrepended(m.getType() + "/{id}"))
                         .parameters(asList(
                             pathParam("id").build()
                         ))
-                        .model(ModelsCatalog.INDEX_MAPPINGS).build()
+                        .model(getModelsCatalog().getModel(getIndexOrAlias(), m.getType())).build()
                 ))
                 .flatMap(r -> r.stream())
                 .collect(Collectors.toList())

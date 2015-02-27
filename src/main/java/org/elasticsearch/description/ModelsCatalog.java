@@ -4,6 +4,10 @@ import net.itimothy.rest.description.Model;
 import net.itimothy.rest.description.Primitive;
 import net.itimothy.rest.description.Property;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import static java.util.Arrays.asList;
 
 public class ModelsCatalog {
@@ -91,4 +95,32 @@ public class ModelsCatalog {
         .id("object")
         .properties(asList(
         )).build();
+
+    Map<String, Model> typeModels = new HashMap<>();
+    
+    public Model getModel(String index, String type) {
+        String id = index + "." + type;
+        
+        if (!typeModels.containsKey(id)) {
+            DataProvider.TypeMapping typeMapping = dataProvider.getAllMappings()
+                .get(index)
+                .getTypeMappings().get(type);
+
+            typeModels.put(
+                id,
+                Model.builder()
+                    .id(id)
+                    .properties(typeMapping.getProperties().values().stream()
+                            .map(p -> Property.builder()
+                                .name(p.getName())
+                                .model(Primitive.STRING)
+                                .build())
+                            .collect(Collectors.toList())
+                    )
+                    .build()
+            );
+        }
+        
+        return typeModels.get(id);
+    }
 }
