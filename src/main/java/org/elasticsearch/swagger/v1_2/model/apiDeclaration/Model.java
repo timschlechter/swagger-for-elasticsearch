@@ -4,6 +4,7 @@ import lombok.*;
 import org.elasticsearch.swagger.v1_2.model.SwaggerModel;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A Model Object holds the definition of a new model for this API Declaration.
@@ -24,7 +25,7 @@ public class Model extends SwaggerModel {
      * A list of properties (fields) that are part of the model.
      */
     @NonNull
-    private List<ModelProperty> properties;
+    private Map<String, ModelProperty> properties;
 
     /**
      * A brief description of this model.

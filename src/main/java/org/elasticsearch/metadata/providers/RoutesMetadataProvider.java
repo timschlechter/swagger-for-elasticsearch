@@ -2,30 +2,25 @@ package org.elasticsearch.metadata.providers;
 
 import lombok.Getter;
 import lombok.experimental.Delegate;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.common.lang3.StringUtils;
 import org.elasticsearch.metadata.Route;
 
 import java.util.List;
 
-@Getter
 public abstract class RoutesMetadataProvider {
-    private final String version;
-    private final Client client;
+    private DataProvider dataProvider;
 
+    @Getter
     @Delegate(types = ModelsCatalog.class)
     private final ModelsCatalog modelsCatalog;
-    
+
+    @Getter
     @Delegate(types = ParametersFactory.class)
     private final ParametersFactory parametersFactory;
-    private DataProvider dataProvider;
 
     private final String defaultGroup;
 
-
-    protected RoutesMetadataProvider(String defaultGroup, String version, Client client, ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider) {
-        this.version = version;
-        this.client = client;
+    protected RoutesMetadataProvider(String defaultGroup, ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider) {
         this.modelsCatalog = modelsCatalog;
         this.defaultGroup = defaultGroup;
         this.parametersFactory = parametersFactory;
@@ -45,4 +40,8 @@ public abstract class RoutesMetadataProvider {
     }
     
     public abstract List<Route> getRoutesInternal();
+
+    public String getVersion() {
+        return dataProvider.getVersion();
+    }
 }

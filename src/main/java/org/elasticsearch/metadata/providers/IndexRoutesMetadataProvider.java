@@ -1,6 +1,5 @@
 package org.elasticsearch.metadata.providers;
 
-import org.elasticsearch.client.Client;
 import org.elasticsearch.metadata.HttpMethod;
 import org.elasticsearch.metadata.Response;
 import org.elasticsearch.metadata.Route;
@@ -10,8 +9,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 class IndexRoutesMetadataProvider extends RoutesMetadataProvider {
-    public IndexRoutesMetadataProvider(String defaultGroup, String version, Client client, ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider) {
-        super(defaultGroup, version, client, modelsCatalog, parametersFactory, dataProvider);
+    public IndexRoutesMetadataProvider(String defaultGroup, ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider) {
+        super(defaultGroup, modelsCatalog, parametersFactory, dataProvider);
     }
 
     @Override
@@ -20,6 +19,7 @@ class IndexRoutesMetadataProvider extends RoutesMetadataProvider {
             Route.builder()
                 .method(HttpMethod.GET)
                 .apiPath("{index}")
+                .model(ModelsCatalog.INDEX_FEATURES)
                 .parameters(asList(
                     buildIndexAliasOrWildcardExpressionsPathParam("index").build()
                 )).build(),
@@ -40,8 +40,8 @@ class IndexRoutesMetadataProvider extends RoutesMetadataProvider {
                 .apiPath("{index}")
                 .description("Used to check if the index (indices) exists or not")
                 .responses(asList(
-                    Response.builder().code(404).message("Index does not exist").build(),
-                    Response.builder().code(200).message("Index exists").build()
+                    Response.builder().code(200).message("Index exists").build(),
+                    Response.builder().code(404).message("Index does not exist").build()
                 ))
                 .parameters(asList(
                     buildIndexPathParam("index").build()
@@ -55,7 +55,9 @@ class IndexRoutesMetadataProvider extends RoutesMetadataProvider {
                     buildEnumPathParam("features", getFeatures())
                         .allowMultiple(true)
                         .build()
-                )).build(),
+                ))
+                .model(ModelsCatalog.INDEX_FEATURES)
+                .build(),
 
             Route.builder()
                 .method(HttpMethod.PUT)

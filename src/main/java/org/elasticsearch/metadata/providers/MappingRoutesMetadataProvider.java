@@ -1,6 +1,5 @@
 package org.elasticsearch.metadata.providers;
 
-import org.elasticsearch.client.Client;
 import org.elasticsearch.metadata.*;
 
 import java.util.List;
@@ -8,8 +7,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 class MappingRoutesMetadataProvider extends RoutesMetadataProvider {
-    public MappingRoutesMetadataProvider(String defaultGroup, String version, Client client, ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider) {
-        super(defaultGroup, version, client, modelsCatalog, parametersFactory, dataProvider);
+    public MappingRoutesMetadataProvider(String defaultGroup, ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider) {
+        super(defaultGroup, modelsCatalog, parametersFactory, dataProvider);
     }
 
     @Override
@@ -18,16 +17,37 @@ class MappingRoutesMetadataProvider extends RoutesMetadataProvider {
             Route.builder()
                 .method(HttpMethod.GET)
                 .apiPath("_mapping")
-                .name("getMapping")
-                .model(ModelsCatalog.MAPPING).build(),
+                .model(ModelsCatalog.INDEX_MAPPINGS).build(),
+
+            Route.builder()
+                .method(HttpMethod.GET)
+                .apiPath("{type}/_mapping")
+                .parameters(asList(
+                    buildIndexAliasOrWildcardExpressionsPathParam("index").build()
+                ))
+                .model(ModelsCatalog.INDEX_MAPPINGS).build(),
+
+            Route.builder()
+                .method(HttpMethod.GET)
+                .apiPath("_mapping/{type}")
+                .parameters(asList(
+                    builDocumentTypePathParam("type").build()
+                ))
+                .model(ModelsCatalog.INDEX_MAPPINGS).build(),
+
+            Route.builder()
+                .method(HttpMethod.GET)
+                .apiPath("{index}/_mapping/{type}")
+                .parameters(asList(
+                    buildIndexAliasOrWildcardExpressionsPathParam("index").build(),
+                    builDocumentTypePathParam("type").build()
+                ))
+                .model(ModelsCatalog.INDEX_MAPPINGS).build(),
             
             Route.builder()
                 .method(HttpMethod.PUT)
                 .parameters(asList(
-                    Parameter.builder()
-                        .paramType(ParameterType.PATH)
-                        .model(Primitive.STRING)
-                        .name("index").build(),
+                    buildIndexAliasOrWildcardExpressionsPathParam("index").build(),
                     Parameter.builder()
                         .paramType(ParameterType.PATH)
                         .model(Primitive.STRING)

@@ -15,20 +15,20 @@ public class ElasticsearchRoutesMetadataProvider extends RoutesMetadataProvider 
 
     private final List<RoutesMetadataProvider> metadataProviders;
 
-    public ElasticsearchRoutesMetadataProvider(String version, Client client) {
-        this(version, client, new DataProvider(client));
+    public ElasticsearchRoutesMetadataProvider(Client client) {
+        this(new DataProvider(client));
     }
     
-    public ElasticsearchRoutesMetadataProvider(String version, Client client, DataProvider dataProvider) {
-        super("Elasticsearch", version, client, 
-            new ModelsCatalog(version, client), 
-            new ParametersFactory(version, client, dataProvider),
+    public ElasticsearchRoutesMetadataProvider(DataProvider dataProvider) {
+        super("Elasticsearch",
+            new ModelsCatalog(dataProvider),
+            new ParametersFactory(dataProvider),
             dataProvider
         );
 
         this.metadataProviders = asList(
-            new IndexRoutesMetadataProvider("Index", getVersion(), getClient(), getModelsCatalog(), getParametersFactory(), dataProvider),
-            new MappingRoutesMetadataProvider("Mapping", getVersion(), getClient(), getModelsCatalog(), getParametersFactory(), dataProvider)
+            new IndexRoutesMetadataProvider("Index", getModelsCatalog(), getParametersFactory(), dataProvider),
+            new MappingRoutesMetadataProvider("Mapping", getModelsCatalog(), getParametersFactory(), dataProvider)
         );
     }
 

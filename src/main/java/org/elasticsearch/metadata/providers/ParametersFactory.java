@@ -1,6 +1,5 @@
 package org.elasticsearch.metadata.providers;
 
-import org.elasticsearch.client.Client;
 import org.elasticsearch.metadata.Parameter;
 import org.elasticsearch.metadata.ParameterType;
 import org.elasticsearch.metadata.Primitive;
@@ -10,20 +9,21 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 class ParametersFactory {
-    private final String version;
-    private final Client client;
     private final DataProvider dataProvider;
 
-    public ParametersFactory(String version, Client client, DataProvider dataProvider) {
-        this.version = version;
-        this.client = client;
+    public ParametersFactory(DataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
-
     public Parameter.ParameterBuilder buildIndexPathParam(String name) {
         return buildPathParam(name)
-            .description("Name of the index");
+            .description("Name of the index")
+            .allowMultiple(true);
+    }
+
+    public Parameter.ParameterBuilder builDocumentTypePathParam(String name) {
+        return buildEnumPathParam(name, dataProvider.getAllDocumentTypes())
+            .allowMultiple(true);
     }
 
     public Parameter.ParameterBuilder buildIndexEnumPathParam(String name) {
@@ -38,7 +38,7 @@ class ParametersFactory {
     public Parameter.ParameterBuilder buildIndexAliasOrWildcardExpressionsPathParam(String name) {
         return buildIndexPathParam(name)
                 .description("Name of the index, an alias or a wildcard expression")
-            ._enum(dataProvider.getAllIndicesAliasesAndWildcardExpessions());
+                ._enum(dataProvider.getAllIndicesAliasesAndWildcardExpessions());
     }
     
     public Parameter.ParameterBuilder buildPathParam(String name) {

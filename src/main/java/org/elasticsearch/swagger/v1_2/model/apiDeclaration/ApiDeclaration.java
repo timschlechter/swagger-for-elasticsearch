@@ -1,10 +1,11 @@
 package org.elasticsearch.swagger.v1_2.model.apiDeclaration;
 
 import lombok.*;
-import org.elasticsearch.swagger.v1_2.model.resourceListing.Authorization;
 import org.elasticsearch.swagger.v1_2.model.SwaggerModel;
+import org.elasticsearch.swagger.v1_2.model.resourceListing.Authorization;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The API Declaration provides information about an API exposed on a resource.
@@ -55,7 +56,7 @@ public class ApiDeclaration extends SwaggerModel {
      */
     @NonNull
     @Singular("model")
-    private List<Model> models;
+    private Map<String, Model> models;
 
     /**
      * A list of MIME types the APIs on this resource can produce. This is global to all APIs but

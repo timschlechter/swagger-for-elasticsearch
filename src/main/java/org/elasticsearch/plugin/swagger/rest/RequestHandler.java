@@ -7,7 +7,6 @@ import org.elasticsearch.metadata.providers.RoutesMetadataProvider;
 import org.elasticsearch.rest.*;
 import org.elasticsearch.swagger.v1_2.model.SwaggerModel;
 
-import static org.elasticsearch.plugin.swagger.SwaggerPlugin.API_VERSION;
 import static org.elasticsearch.rest.RestStatus.OK;
 
 public abstract class RequestHandler extends BaseRestHandler {
@@ -29,6 +28,6 @@ public abstract class RequestHandler extends BaseRestHandler {
     }
     
     protected RoutesMetadataProvider getMetadataProvider(RestRequest request, Client client) {
-        return new ElasticsearchRoutesMetadataProvider(API_VERSION, client);
+        return new ElasticsearchRoutesMetadataProvider(client);
     }
 }

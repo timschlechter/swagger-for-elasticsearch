@@ -10,10 +10,7 @@ import org.elasticsearch.swagger.v1_2.model.resourceListing.Info;
 import org.elasticsearch.swagger.v1_2.model.resourceListing.Resource;
 import org.elasticsearch.swagger.v1_2.model.resourceListing.ResourceListing;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SwaggerMetadataConverter {
@@ -141,7 +138,7 @@ public class SwaggerMetadataConverter {
             : route.getName();
     }
 
-    public List<Model> toModels(List<Route> routes) {
+    public Map<String, Model> toModels(List<Route> routes) {
         List<org.elasticsearch.metadata.Model> responseModels = routes.stream()
             .map(r -> r.getModel())
             .collect(Collectors.toList());
@@ -166,7 +163,7 @@ public class SwaggerMetadataConverter {
         List<org.elasticsearch.metadata.Model> propertyModels = result.stream()
             .filter(m -> m != null)
             .filter(m -> m.getProperties() != null)
-            .flatMap(m -> m.getProperties().stream())
+            .flatMap(m -> flattenProperties(m).stream())
             .map(p -> p.getModel())
             .collect(Collectors.toList());
 
@@ -176,7 +173,22 @@ public class SwaggerMetadataConverter {
             .filter(m -> m != null)
             .filter(m -> !m.isPrimitive())
             .map(m -> toModel(m))
-            .collect(Collectors.toList());
+            .collect(Collectors.toMap(
+                m -> m.getId(),
+                m -> m
+            ));
+    }
+
+    private List<Property> flattenProperties(org.elasticsearch.metadata.Model model) {
+        List<Property> result = new ArrayList<>(model.getProperties());
+
+        for(Property p : model.getProperties()) {
+            if (p.model != null && p.model.getProperties() != null) {
+                result.addAll(flattenProperties(p.model));
+            }
+        }
+
+        return result;
     }
 
     private Model toModel(org.elasticsearch.metadata.Model model) {
@@ -185,7 +197,10 @@ public class SwaggerMetadataConverter {
             .properties(
                 model.getProperties().stream()
                     .map(this::toModelProperty)
-                    .collect(Collectors.toList())
+                    .collect(Collectors.toMap(
+                        p -> p.getName(),
+                        p -> p
+                    ))
             )
             .build();
     }
