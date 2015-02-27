@@ -94,7 +94,7 @@
                             </outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/swagger-ui/dist</directory>
+                                    <directory>${basedir}/src/main/resources/elasticsearch-swagger-ui/dist</directory>
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>

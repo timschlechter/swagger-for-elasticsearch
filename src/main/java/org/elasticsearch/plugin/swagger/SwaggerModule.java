@@ -1,8 +1,8 @@
 package org.elasticsearch.plugin.swagger;
 
 import org.elasticsearch.common.inject.AbstractModule;
-import org.elasticsearch.plugin.swagger.rest.ApiDeclarationRequestHandler;
-import org.elasticsearch.plugin.swagger.rest.ResourceListingRequestHandler;
+import org.elasticsearch.plugin.swagger.v1_2.rest.ApiDeclarationRequestHandler;
+import org.elasticsearch.plugin.swagger.v1_2.rest.ResourceListingRequestHandler;
 
 public class SwaggerModule extends AbstractModule {
 

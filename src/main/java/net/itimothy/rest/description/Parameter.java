@@ -1,0 +1,29 @@
+package net.itimothy.rest.description;
+
+import lombok.*;
+
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+public class Parameter {
+    @NonNull
+    public ParameterType paramType;
+
+    public String name;
+    
+    public String description;
+
+    public Boolean required;
+
+    public Object defaultValue;
+
+    public Model model;
+    
+    public Boolean allowMultiple;
+    
+    public List<String> _enum;
+}

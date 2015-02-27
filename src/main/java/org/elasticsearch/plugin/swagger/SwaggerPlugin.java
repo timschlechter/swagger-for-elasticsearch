@@ -7,8 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class SwaggerPlugin extends AbstractPlugin {
-    public final static String API_VERSION = "1.4.4";
-    public final static String API_DOCS_PATH = "_api-docs";
+    public final static String API_DOCS_PATH = "_swagger";
 
     @Override
     public String name() {
