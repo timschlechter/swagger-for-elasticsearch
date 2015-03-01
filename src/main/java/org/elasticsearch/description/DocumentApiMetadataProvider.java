@@ -6,14 +6,15 @@ import net.itimothy.rest.description.ParameterType;
 import net.itimothy.rest.description.Route;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
-public class TypeApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public TypeApiMetadataProvider(ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider, String indexOrAlias) {
-        super("Type", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
+public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
+    public DocumentApiMetadataProvider(ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider, String indexOrAlias) {
+        super("Document APIs", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
     }
 
     @Override
@@ -38,9 +39,10 @@ public class TypeApiMetadataProvider extends ElasticSearchMetadataProvider {
 
         result.addAll(
             getModelsCatalog().getIndexTypeModelsMap().get(getIndexOrAlias()).stream()
+                .sorted(Comparator.comparing(m -> m.getName()))
                 .map(model -> asList(
                     Route.builder()
-                        .group(getDefaultGroup() + ": " + model.getName())
+                        .group(model.getName())
                         .method(HttpMethod.POST)
                         .apiPath(indexOrAliasPrepended(model.getName()))
                         .parameters(asList(
@@ -50,7 +52,7 @@ public class TypeApiMetadataProvider extends ElasticSearchMetadataProvider {
                         )).build(),
 
                     Route.builder()
-                        .group(getDefaultGroup() + ": " + model.getName())
+                        .group(model.getName())
                         .method(HttpMethod.GET)
                         .apiPath(indexOrAliasPrepended(model.getName() + "/{id}"))
                         .parameters(asList(

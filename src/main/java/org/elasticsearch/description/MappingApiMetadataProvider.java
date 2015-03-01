@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 
 class MappingApiMetadataProvider extends ElasticSearchMetadataProvider {
     public MappingApiMetadataProvider(ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider, String indexOrAlias) {
-        super("Mapping", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
+        super("Mapping APIs", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
     }
     
     @Override

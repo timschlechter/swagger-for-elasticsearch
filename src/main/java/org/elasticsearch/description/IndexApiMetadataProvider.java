@@ -10,7 +10,7 @@ import static java.util.Arrays.asList;
 
 class IndexApiMetadataProvider extends ElasticSearchMetadataProvider {
     public IndexApiMetadataProvider(ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider, String indexOrAlias) {
-        super("Index", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
+        super("Index APIs", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
     }
 
     @Override

@@ -39,7 +39,8 @@ public class MainApiMetadataProvider extends ElasticSearchMetadataProvider {
         this.metadataProviders = asList(
             new IndexApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias),
             new MappingApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias),
-            new TypeApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias)
+            new AliasApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias),
+            new DocumentApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias)
         );
     }
 

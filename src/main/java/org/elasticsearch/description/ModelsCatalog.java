@@ -30,84 +30,6 @@ public class ModelsCatalog {
         this.indexOrAlias = indexOrAlias;
     }
 
-    public static final Model MAPPING_PROPERTY = Model.builder()
-        .id("mapping-property")
-        .properties(asList(
-            Property.builder()
-                .name("type")
-                .model(Primitive.STRING).build(),
-            Property.builder()
-                .name("format")
-                .model(Primitive.STRING).build(),
-            Property.builder()
-                .name("analyzer")
-                .model(Primitive.STRING).build(),
-            Property.builder()
-                .name("index_analyzer")
-                .model(Primitive.STRING).build(),
-            Property.builder()
-                .name("search_analyzer")
-                .model(Primitive.STRING).build(),
-            Property.builder()
-                .name("store")
-                .model(Primitive.BOOLEAN).build()
-        )).build();
-
-    public static final Model MAPPING_PROPERTIES_PROPERTY = Model.builder()
-        .id("mapping-properties-property")
-        .properties(asList(
-            Property.builder()
-                .name("<property>")
-                .model(MAPPING_PROPERTY)
-                .build()
-        )).build();
-
-    public static final Model MAPPING = Model.builder()
-        .id("mapping")
-        .properties(asList(
-            Property.builder()
-                .name("<type>")
-                .model(
-                    Model.builder()
-                        .id("mapping-properties")
-                        .properties(asList(
-                            Property.builder()
-                                .name("properties")
-                                .model(MAPPING_PROPERTIES_PROPERTY)
-                                .build()
-                        )).build()
-                ).build()
-        )).build();
-
-    public static final Model INDEX_MAPPINGS = Model.builder()
-        .id("index-mappings")
-        .properties(asList(
-            Property.builder()
-                .name("<index>")
-                .model(MAPPING).build()
-        )).build();
-
-    public static final Model FEATURES = Model.builder()
-        .id("features")
-        .properties(asList(
-            Property.builder()
-                .name("mappings")
-                .model(MAPPING).build()
-        )).build();
-
-    public static final Model INDEX_FEATURES = Model.builder()
-        .id("index-features")
-        .properties(asList(
-            Property.builder()
-                .name("<index>")
-                .model(FEATURES).build()
-        )).build();
-
-    public static final Model OBJECT = Model.builder()
-        .id("object")
-        .properties(asList(
-        )).build();
-
     public Map<String, List<Model>> getIndexTypeModelsMap() {
         if (indexTypeModelsMap == null) {
             indexTypeModelsMap = new HashMap<>();
@@ -155,6 +77,7 @@ public class ModelsCatalog {
 
         return indexTypeModelsMap;
     }
+    
     public Map<String, List<Model>> getIndexDocumentModelsMap() {
         if (indexDocumentModelsMap == null) {
             indexDocumentModelsMap = getIndexTypeModelsMap().entrySet().stream()
@@ -270,4 +193,127 @@ public class ModelsCatalog {
     private static String getDocumentModelId(String index, String typeName) {
         return getTypeModelId(index, typeName) + "Document";
     }
+
+    public static final Model MAPPING_PROPERTY = Model.builder()
+        .id("mapping-property")
+        .properties(asList(
+            Property.builder()
+                .name("type")
+                .model(Primitive.STRING).build(),
+            Property.builder()
+                .name("format")
+                .model(Primitive.STRING).build(),
+            Property.builder()
+                .name("analyzer")
+                .model(Primitive.STRING).build(),
+            Property.builder()
+                .name("index_analyzer")
+                .model(Primitive.STRING).build(),
+            Property.builder()
+                .name("search_analyzer")
+                .model(Primitive.STRING).build(),
+            Property.builder()
+                .name("store")
+                .model(Primitive.BOOLEAN).build()
+        )).build();
+
+    public static final Model MAPPING_PROPERTIES_PROPERTY = Model.builder()
+        .id("mapping-properties-property")
+        .properties(asList(
+            Property.builder()
+                .name("<property>")
+                .model(MAPPING_PROPERTY)
+                .build()
+        )).build();
+
+    public static final Model MAPPING = Model.builder()
+        .id("mapping")
+        .properties(asList(
+            Property.builder()
+                .name("<type>")
+                .model(
+                    Model.builder()
+                        .id("mapping-properties")
+                        .properties(asList(
+                            Property.builder()
+                                .name("properties")
+                                .model(MAPPING_PROPERTIES_PROPERTY)
+                                .build()
+                        )).build()
+                ).build()
+        )).build();
+
+    public static final Model INDEX_MAPPINGS = Model.builder()
+        .id("index-mappings")
+        .properties(asList(
+            Property.builder()
+                .name("<index>")
+                .model(MAPPING).build()
+        )).build();
+
+    public static final Model FEATURES = Model.builder()
+        .id("features")
+        .properties(asList(
+            Property.builder()
+                .name("mappings")
+                .model(MAPPING).build()
+        )).build();
+
+    public static final Model INDEX_FEATURES = Model.builder()
+        .id("index-features")
+        .properties(asList(
+            Property.builder()
+                .name("<index>")
+                .model(FEATURES).build()
+        )).build();
+
+    public static final Model OBJECT = Model.builder()
+        .id("object")
+        .properties(asList(
+        )).build();
+
+
+
+
+    public static final Model FILTER = Model.builder()
+        .id("filter")
+        .properties(asList(
+        )).build();
+    
+    public static final Model ALIAS = Model.builder()
+        .id("alias")
+        .properties(asList(
+            Property.builder()
+                .name("filter")
+                .model(FILTER).build(),
+            Property.builder()
+                .name("index_routing")
+                .model(Primitive.STRING).build(),
+            Property.builder()
+                .name("search_routing")
+                .model(Primitive.STRING).build()
+        )).build();
+    
+    public static final Model ALIASES = Model.builder()
+        .id("aliases")
+        .properties(asList(
+            Property.builder()
+                .name("<alias>")
+                .model(ALIAS).build()
+        )).build();
+
+    public static final Model INDEX_ALIASES = Model.builder()
+        .id("index-aliases")
+        .properties(asList(
+            Property.builder()
+                .name("<index>")
+                .model(Model.builder()
+                    .id("index-aliases-aliases")
+                    .properties(asList(
+                        Property.builder()
+                            .name("aliases")
+                            .model(ALIASES)
+                            .build()
+                    )).build()).build()
+        )).build();
 }
