@@ -94,21 +94,33 @@ public class ModelsCatalog {
                                         .properties(asList(
                                             Property.builder()
                                                 .name("_index")
+                                                .description("Index which this document is in")
+                                                .required(true)
                                                 .model(Primitive.STRING).build(),
                                             Property.builder()
                                                 .name("_type")
+                                                .description("Type of this document")
+                                                .required(true)
                                                 .model(Primitive.STRING).build(),
                                             Property.builder()
                                                 .name("_id")
+                                                .description("Unique identifier of this document within its index and type")
+                                                .required(true)
                                                 .model(Primitive.STRING).build(),
                                             Property.builder()
                                                 .name("_version")
+                                                .description("Version of the document")
+                                                .required(true)
                                                 .model(Primitive.LONG).build(),
                                             Property.builder()
                                                 .name("_found")
+                                                .description("Returns whether the document was found or not")
+                                                .required(true)
                                                 .model(Primitive.BOOLEAN).build(),
                                             Property.builder()
                                                 .name("_source")
+                                                .required(false)
+                                                .description("Contains the actual document when found")
                                                 .model(m).build()
                                         ))
                                         .build()

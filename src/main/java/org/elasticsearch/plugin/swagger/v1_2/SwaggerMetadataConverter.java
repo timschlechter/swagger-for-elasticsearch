@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SwaggerMetadataConverter {
-   public HttpMethod convert(net.itimothy.rest.description.HttpMethod httpMethod) {
+    public HttpMethod convert(net.itimothy.rest.description.HttpMethod httpMethod) {
         switch (httpMethod) {
             case DELETE:
                 return HttpMethod.DELETE;
@@ -111,7 +111,7 @@ public class SwaggerMetadataConverter {
                     ? parameter.getRequired()
                     : false
             )
-            ._enum(parameter._enum)
+            ._enum(parameter.get_enum())
             .build();
     }
 
@@ -182,9 +182,9 @@ public class SwaggerMetadataConverter {
     private List<Property> flattenProperties(net.itimothy.rest.description.Model model) {
         List<Property> result = new ArrayList<>(model.getProperties());
 
-        for(Property p : model.getProperties()) {
-            if (p.model != null && p.model.getProperties() != null) {
-                result.addAll(flattenProperties(p.model));
+        for (Property p : model.getProperties()) {
+            if (p.getModel() != null && p.getModel().getProperties() != null) {
+                result.addAll(flattenProperties(p.getModel()));
             }
         }
 
@@ -194,6 +194,14 @@ public class SwaggerMetadataConverter {
     private Model toModel(net.itimothy.rest.description.Model model) {
         return Model.builder()
             .id(model.getId())
+            .required(
+                model.getProperties().stream()
+                    .filter(p -> p != null)
+                    .filter(p -> p.getRequired() != null)
+                    .filter(p -> p.getRequired())
+                    .map(p -> p.getName())
+                    .collect(Collectors.toList())
+            )
             .properties(
                 model.getProperties().stream()
                     .map(this::toModelProperty)
@@ -201,8 +209,7 @@ public class SwaggerMetadataConverter {
                         p -> p.getName(),
                         p -> p
                     ))
-            )
-            .build();
+            ).build();
     }
 
     private ModelProperty toModelProperty(Property property) {
@@ -210,10 +217,9 @@ public class SwaggerMetadataConverter {
         Primitive primitive = model instanceof Primitive ? (Primitive) model : null;
         return ModelProperty.builder()
             .name(property.getName())
-            .description(property.description)
+            .description(property.getDescription())
             .type(primitive != null ? primitive.getType() : null)
-            .ref(primitive == null ? model.getId() : null)
-            .build();
+            .ref(primitive == null ? model.getId() : null).build();
     }
 
     private static String toCamelCase(final String value) {
@@ -234,9 +240,7 @@ public class SwaggerMetadataConverter {
             .info(
                 Info.builder()
                     .title(info.getTitle())
-                    .description(info.getDescription())
-                    .build()
-            )
-            .build();
+                    .description(info.getDescription()).build()
+            ) .build();
     }
 }

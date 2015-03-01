@@ -36,6 +36,9 @@ public abstract class ElasticSearchMetadataProvider {
                 route.setGroup(defaultGroup);
             }
         }
+        
+        // TODO: modify the result to remove every Description object which does not matches 
+        //       the current node's version of Elasticsearch
 
         return result;
     }

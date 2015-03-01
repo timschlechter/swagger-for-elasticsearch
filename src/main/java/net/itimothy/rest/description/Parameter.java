@@ -1,29 +1,40 @@
 package net.itimothy.rest.description;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
-@RequiredArgsConstructor
-@AllArgsConstructor
-public class Parameter {
-    @NonNull
-    public ParameterType paramType;
+public class Parameter extends Description {
+    private ParameterType paramType;
 
-    public String name;
-    
-    public String description;
+    private String name;
 
-    public Boolean required;
+    private String description;
 
-    public Object defaultValue;
+    private Boolean required;
 
-    public Model model;
-    
+    private Object defaultValue;
+
+    private Model model;
+
     public Boolean allowMultiple;
     
-    public List<String> _enum;
+    private List<String> _enum;
+
+    @Builder
+    public Parameter(String minVersion, String maxVersion, ParameterType paramType, String name,
+                     String description, Boolean required, Object defaultValue, Model model,
+                     Boolean allowMultiple, List<String> _enum) {
+        super(minVersion, maxVersion);
+        this.paramType = paramType;
+        this.name = name;
+        this.description = description;
+        this.required = required;
+        this.defaultValue = defaultValue;
+        this.model = model;
+        this.allowMultiple = allowMultiple;
+        this._enum = _enum;
+    }
 }

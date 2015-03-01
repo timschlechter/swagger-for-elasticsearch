@@ -16,20 +16,16 @@ public class Primitive extends Model {
     public static final Primitive DATE = new Primitive("date", "string", "date");
     public static final Primitive DATETIME = new Primitive("dateTime", "string", "date-time");
 
-    private final String id;
     private String type;
     private final String format;
 
     public Primitive(String id, String type, String format) {
-        this.id = id;
+        super(null, null, id, null, id, id);
         this.type = type;
         this.format = format;
     }
 
     public boolean isPrimitive() {
         return true;
-    }
-
-    public class SHORT {
     }
 }

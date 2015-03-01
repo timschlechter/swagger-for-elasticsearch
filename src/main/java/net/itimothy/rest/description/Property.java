@@ -6,23 +6,38 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Builder
-public class Property {
-    public Object defaultValue;
+public class Property extends Description {
+    private Object defaultValue;
 
-    public String description;
+    private String description;
 
-    public List<String> enumValues;
+    private List<String> enumValues;
 
-    public Long maximum;
+    private Long maximum;
 
-    public Long minimum;
+    private Long minimum;
 
-    public String name;
+    private String name;
 
-    public Boolean required;
+    private Boolean required;
 
-    public Model model;
+    private Model model;
 
-    public Boolean uniqueItems;
+    private Boolean uniqueItems;
+
+    @Builder
+    public Property(String minVersion, String maxVersion, Object defaultValue, String description,
+                    List<String> enumValues, Long maximum, Long minimum, String name,
+                    Boolean required, Model model, Boolean uniqueItems) {
+        super(minVersion, maxVersion);
+        this.defaultValue = defaultValue;
+        this.description = description;
+        this.enumValues = enumValues;
+        this.maximum = maximum;
+        this.minimum = minimum;
+        this.name = name;
+        this.required = required;
+        this.model = model;
+        this.uniqueItems = uniqueItems;
+    }
 }

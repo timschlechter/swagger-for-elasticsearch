@@ -42,7 +42,7 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                 .sorted(Comparator.comparing(m -> m.getName()))
                 .map(model -> asList(
                     Route.builder()
-                        .group(model.getName())
+                        .group("- " + model.getName())
                         .method(HttpMethod.POST)
                         .apiPath(indexOrAliasPrepended(model.getName()))
                         .parameters(asList(
@@ -52,7 +52,7 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                         )).build(),
 
                     Route.builder()
-                        .group(model.getName())
+                        .group("- " + model.getName())
                         .method(HttpMethod.GET)
                         .apiPath(indexOrAliasPrepended(model.getName() + "/{id}"))
                         .parameters(asList(
