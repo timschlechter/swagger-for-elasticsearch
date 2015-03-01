@@ -7,8 +7,9 @@ public class Primitive extends Model {
     public static final Primitive VOID = new Primitive("void", "void", null);
     public static final Primitive INTEGER = new Primitive("integer", "integer", "int32");
     public static final Primitive LONG = new Primitive("long", "integer", "int64");
-    public static final Primitive FLOAT = new Primitive("float", "number", "int64");
-    public static final Primitive DOULBE = new Primitive("double", "number", "int64");
+    public static final Primitive FLOAT = new Primitive("float", "number", null);
+    public static final Primitive SHORT = new Primitive("short", "number", null);
+    public static final Primitive DOUBLE = new Primitive("double", "number", null);
     public static final Primitive STRING = new Primitive("string", "string", null);
     public static final Primitive BYTE = new Primitive("byte", "string", "byte");
     public static final Primitive BOOLEAN = new Primitive("boolean", "boolean", null);
@@ -27,5 +28,8 @@ public class Primitive extends Model {
 
     public boolean isPrimitive() {
         return true;
+    }
+
+    public class SHORT {
     }
 }

@@ -5,14 +5,17 @@ import net.itimothy.rest.description.ParameterType;
 import net.itimothy.rest.description.Primitive;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
 class ParametersFactory {
     private final DataProvider dataProvider;
+    private ModelsCatalog modelsCatalog;
 
-    public ParametersFactory(DataProvider dataProvider) {
+    public ParametersFactory(DataProvider dataProvider, ModelsCatalog modelsCatalog) {
         this.dataProvider = dataProvider;
+        this.modelsCatalog = modelsCatalog;
     }
 
     public Parameter.ParameterBuilder buildIndexPathParam(String name) {
@@ -22,8 +25,13 @@ class ParametersFactory {
     }
 
     public Parameter.ParameterBuilder typePathParam(String name) {
-        return buildEnumPathParam(name, dataProvider.getAllDocumentTypes())
-            .allowMultiple(true);
+        return buildEnumPathParam(
+            name,
+            modelsCatalog.getTypeModels().stream()
+                .map(m -> m.getName())
+                .distinct()
+                .collect(Collectors.toList())
+        ).allowMultiple(true);
     }
 
     public Parameter.ParameterBuilder indexEnumPathParam(String name) {

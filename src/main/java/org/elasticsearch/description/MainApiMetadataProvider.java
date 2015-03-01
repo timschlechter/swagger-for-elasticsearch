@@ -23,11 +23,15 @@ public class MainApiMetadataProvider extends ElasticSearchMetadataProvider {
     public MainApiMetadataProvider(Client client, String indexOrAlias) {
         this(new DataProvider(client), indexOrAlias);
     }
+
+    private MainApiMetadataProvider(DataProvider dataProvider, String indexOrAlias) {
+        this(dataProvider, new ModelsCatalog(dataProvider, indexOrAlias), indexOrAlias);
+    }
     
-    public MainApiMetadataProvider(DataProvider dataProvider, String indexOrAlias) {
+    public MainApiMetadataProvider(DataProvider dataProvider, ModelsCatalog modelsCatalog, String indexOrAlias) {
         super("Elasticsearch",
-            new ModelsCatalog(dataProvider),
-            new ParametersFactory(dataProvider),
+            modelsCatalog,
+            new ParametersFactory(dataProvider, modelsCatalog),
             dataProvider,
             indexOrAlias
         );

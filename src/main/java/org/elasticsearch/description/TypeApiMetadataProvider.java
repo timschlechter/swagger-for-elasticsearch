@@ -37,26 +37,26 @@ public class TypeApiMetadataProvider extends ElasticSearchMetadataProvider {
         ));
 
         result.addAll(
-            this.getDataProvider().getMapping(getIndexOrAlias()).stream()
-                .map(m -> asList(
+            getModelsCatalog().getIndexTypeModelsMap().get(getIndexOrAlias()).stream()
+                .map(model -> asList(
                     Route.builder()
-                        .group(getDefaultGroup() + ": " + m.getType())
+                        .group(getDefaultGroup() + ": " + model.getName())
                         .method(HttpMethod.POST)
-                        .apiPath(indexOrAliasPrepended(m.getType()))
+                        .apiPath(indexOrAliasPrepended(model.getName()))
                         .parameters(asList(
                             Parameter.builder()
                                 .paramType(ParameterType.BODY)
-                                .model(getModelsCatalog().getModel(getIndexOrAlias(), m.getType())).build()
+                                .model(model).build()
                         )).build(),
 
                     Route.builder()
-                        .group(getDefaultGroup() + ": " + m.getType())
+                        .group(getDefaultGroup() + ": " + model.getName())
                         .method(HttpMethod.GET)
-                        .apiPath(indexOrAliasPrepended(m.getType() + "/{id}"))
+                        .apiPath(indexOrAliasPrepended(model.getName() + "/{id}"))
                         .parameters(asList(
                             pathParam("id").build()
                         ))
-                        .model(getModelsCatalog().getModel(getIndexOrAlias(), m.getType())).build()
+                        .model(getModelsCatalog().getDocumentModel(model)).build()
                 ))
                 .flatMap(r -> r.stream())
                 .collect(Collectors.toList())

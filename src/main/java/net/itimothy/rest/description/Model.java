@@ -11,11 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 public class Model {
     @NonNull
-    private String id;
+    private String id;    
 
     @NonNull
     @Singular("property")
     private List<Property> properties;
+
+    private String name;
 
     private String description;
     
