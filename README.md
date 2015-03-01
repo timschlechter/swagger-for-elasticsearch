@@ -4,9 +4,10 @@ Provides [Swagger](http://swagger.io/) documentation for your Elasticsearch clus
 
 ### Features###
 * API documentation per index/alias
-* Automatically adapts to the version of you Elasticsearch installation
+* Documented APIs for every stored type
+* Automatically adapts to the version of your Elasticsearch installation
 * Includes a slightly modified version of [Swagger UI](https://github.com/swagger-api/swagger-ui) to make it easy to switch index/alias API's
-* Automatic generation of the documentation, just install the plugin and go!
+* Dynamic generation of the documentation, just install the plugin and go!
  
 
 Development
@@ -27,7 +28,7 @@ This will start Elasticsearch on [http://localhost:9200](http://localhost:9200).
 
 Installation
 ------------
-This plugin is currently in development, no releases have been done yet. If you would like to install the plugin manually, you can do getting the build release package (see Development) and run the following command from within the Elasticsearch folder:
+This plugin is currently in development, no releases have been published yet. If you would like to install the plugin manually, you can do so by getting the build release package (see Development) and run the following command from within your Elasticsearch folder:
 
 ```
 ./bin/plugin --u file:///path/to/plugin.zip --i swagger 
