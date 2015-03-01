@@ -58,7 +58,16 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                         .parameters(asList(
                             pathParam("id").build()
                         ))
-                        .model(getModelsCatalog().getDocumentModel(model)).build()
+                        .model(getModelsCatalog().getDocumentModel(model)).build(),
+
+                    Route.builder()
+                        .group("- " + model.getName())
+                        .method(HttpMethod.DELETE)
+                        .apiPath(indexOrAliasPrepended(model.getName() + "/{id}"))
+                        .parameters(asList(
+                            pathParam("id").build()
+                        ))
+                        .model(getModelsCatalog().DOCUMENT_METADATA).build()
                 ))
                 .flatMap(r -> r.stream())
                 .collect(Collectors.toList())
