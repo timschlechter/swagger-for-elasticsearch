@@ -19,12 +19,18 @@ public abstract class RequestHandler extends BaseRestHandler {
 
     @Override
     protected void handleRequest(RestRequest request, RestChannel channel, Client client) throws Exception {
-        SwaggerModel model = handleRequest(request, client);
-        RestResponse response = new BytesRestResponse(OK, "application/json", model.toJson());
+        try {
+            SwaggerModel model = handleRequest(request, client);
+            RestResponse response = new BytesRestResponse(OK, "application/json", model.toJson());
 
-        response.addHeader("Access-Control-Allow-Methods", "GET");
+            response.addHeader("Access-Control-Allow-Methods", "GET");
 
-        channel.sendResponse(response);
+            channel.sendResponse(response);
+        }
+        catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw ex;
+        }
     }
     
     protected ElasticSearchMetadataProvider getMetadataProvider(RestRequest request, Client client) {
