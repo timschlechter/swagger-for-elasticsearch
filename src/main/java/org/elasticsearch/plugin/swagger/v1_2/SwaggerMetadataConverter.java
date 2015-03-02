@@ -105,6 +105,7 @@ public class SwaggerMetadataConverter {
             .type(primitive != null ? primitive.getType() : model.getId())
             .paramType(convert(parameter.getParamType()))
             .description(parameter.getDescription())
+            .defaultValue(parameter.getDefaultValue())
             .required(paramType == ParameterType.path
                     ? true
                     : parameter.getRequired() != null

@@ -1,5 +1,6 @@
 package org.elasticsearch.description;
 
+import net.itimothy.rest.description.Model;
 import net.itimothy.rest.description.Parameter;
 import net.itimothy.rest.description.ParameterType;
 import net.itimothy.rest.description.Primitive;
@@ -43,6 +44,11 @@ class ParametersFactory {
             ._enum(values);
     }
 
+    public Parameter.ParameterBuilder enumQueryParam(String name, List<String> values) {
+        return queryParam(name)
+            ._enum(values);
+    }
+
     public Parameter.ParameterBuilder indexAliasOrWildcardExpressionsPathParam(String name) {
         return buildIndexPathParam(name)
                 .description("blank | * | _all | glob pattern | name1, name2, …")
@@ -53,6 +59,17 @@ class ParametersFactory {
         return Parameter.builder()
             .paramType(ParameterType.PATH)
             .model(Primitive.STRING)
+            .name(name);
+    }
+
+    public Parameter.ParameterBuilder queryParam(String name) {
+        return queryParam(name, Primitive.STRING);
+    }
+
+    public Parameter.ParameterBuilder queryParam(String name, Model model) {
+        return Parameter.builder()
+            .paramType(ParameterType.QUERY)
+            .model(model)
             .name(name);
     }
     
