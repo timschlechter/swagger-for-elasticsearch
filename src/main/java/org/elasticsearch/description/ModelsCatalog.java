@@ -54,14 +54,17 @@ public class ModelsCatalog {
                     }
 
                     List<Property> properties = new ArrayList<>();
-                    for (Object propertyName : mappingProperties.keySet()) {
-                        String mappingType = ((Map) mappingProperties.get(propertyName.toString())).get("type").toString();
-
-                        properties.add(
-                            Property.builder()
-                                .name(propertyName.toString())
-                                .model(mappingTypeToModel(mappingType)).build()
-                        );
+                    for (Object propertyNameObj : mappingProperties.keySet()) {
+                        String propertyName = propertyNameObj.toString();
+                        if (mappingProperties.containsKey(propertyName)) {
+                            Map fieldMapping = (Map) mappingProperties.get(propertyName);
+                            String mappingType = fieldMapping.containsKey("type") ? fieldMapping.get("type").toString() : "string";
+                            properties.add(
+                                Property.builder()
+                                    .name(propertyName.toString())
+                                    .model(mappingType != null ? mappingTypeToModel(mappingType) : null).build()
+                            );
+                        }
                     }
 
                     typeModels.add(
