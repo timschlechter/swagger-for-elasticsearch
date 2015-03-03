@@ -19,7 +19,6 @@ public class MainApiMetadataProvider extends ElasticSearchMetadataProvider {
         this(new DataProvider(client), null);
     }
 
-
     public MainApiMetadataProvider(Client client, String indexOrAlias) {
         this(new DataProvider(client), indexOrAlias);
     }
@@ -31,19 +30,17 @@ public class MainApiMetadataProvider extends ElasticSearchMetadataProvider {
     public MainApiMetadataProvider(DataProvider dataProvider, ModelsCatalog modelsCatalog, String indexOrAlias) {
         super("Elasticsearch",
             modelsCatalog,
-            new ParametersFactory(dataProvider, modelsCatalog),
             dataProvider,
             indexOrAlias
         );
 
         this.metadataProviders = asList(
-            new IndexApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias),
-            new MappingApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias),
-            new AliasApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias),
-            new DocumentApiMetadataProvider(getModelsCatalog(), getParametersFactory(), dataProvider, indexOrAlias)
+            new IndexApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias),
+            new MappingApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias),
+            new AliasApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias),
+            new DocumentApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias)
         );
     }
-
 
     @Override
     public List<Route> getRoutesInternal() {

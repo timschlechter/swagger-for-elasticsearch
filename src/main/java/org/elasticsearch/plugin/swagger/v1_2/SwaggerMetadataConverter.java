@@ -1,11 +1,11 @@
 package org.elasticsearch.plugin.swagger.v1_2;
 
-import net.itimothy.rest.description.Primitive;
-import net.itimothy.rest.description.Property;
-import net.itimothy.rest.description.Response;
-import net.itimothy.rest.description.Route;
+import net.itimothy.rest.description.*;
 import org.elasticsearch.common.lang3.StringUtils;
 import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.*;
+import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.HttpMethod;
+import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.Model;
+import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.Parameter;
 import org.elasticsearch.plugin.swagger.v1_2.model.resourceListing.Info;
 import org.elasticsearch.plugin.swagger.v1_2.model.resourceListing.Resource;
 import org.elasticsearch.plugin.swagger.v1_2.model.resourceListing.ResourceListing;
@@ -112,11 +112,11 @@ public class SwaggerMetadataConverter {
                     ? parameter.getRequired()
                     : false
             )
-            ._enum(parameter.get_enum())
+            ._enum(parameter.getEnumValues())
             .build();
     }
 
-    private ParameterType convert(net.itimothy.rest.description.ParameterType paramType) {
+    private ParameterType convert(ParamType paramType) {
         switch (paramType) {
             case BODY:
                 return ParameterType.body;

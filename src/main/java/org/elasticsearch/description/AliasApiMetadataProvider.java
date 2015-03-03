@@ -1,6 +1,7 @@
 package org.elasticsearch.description;
 
 import net.itimothy.rest.description.HttpMethod;
+import net.itimothy.rest.description.ParamType;
 import net.itimothy.rest.description.Route;
 
 import java.util.List;
@@ -8,8 +9,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 class AliasApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public AliasApiMetadataProvider(ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider, String indexOrAlias) {
-        super("Alias APIs", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
+    public AliasApiMetadataProvider(ModelsCatalog modelsCatalog, DataProvider dataProvider, String indexOrAlias) {
+        super("Alias APIs", modelsCatalog, dataProvider, indexOrAlias);
     }
 
     @Override
@@ -23,14 +24,14 @@ class AliasApiMetadataProvider extends ElasticSearchMetadataProvider {
                 .method(HttpMethod.GET)
                 .apiPath("_alias")
                 .model(ModelsCatalog.INDEX_ALIASES).build(),
-            
+
             Route.builder()
                 .method(HttpMethod.GET)
                 .apiPath("_alias/{index}")
                 .model(ModelsCatalog.INDEX_FEATURES)
-                .parameters(asList(
-                    indexAliasOrWildcardExpressionsPathParam("index").build()
-                )).build()
+                .parameters(
+                    indexOrAliasSelectParam("index", ParamType.PATH).build()
+                ).build()
         );
     }
 }

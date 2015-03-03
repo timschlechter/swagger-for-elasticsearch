@@ -3,7 +3,7 @@ package org.elasticsearch.plugin.swagger.v1_2.model.resourceListing;
 /**
  * An enum representing the model of the authorization scheme.
  */
-enum AuthorizationType {
+public enum AuthorizationType {
     /**
      * Basic HTTP authentication.
      */

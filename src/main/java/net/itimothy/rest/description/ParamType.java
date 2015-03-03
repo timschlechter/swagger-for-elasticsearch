@@ -1,6 +1,6 @@
 package net.itimothy.rest.description;
 
-public enum ParameterType {
+public enum ParamType {
     PATH,
     QUERY,
     BODY,

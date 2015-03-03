@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 
 public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public DocumentApiMetadataProvider(ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider, String indexOrAlias) {
-        super("Document APIs", modelsCatalog, parametersFactory, dataProvider, indexOrAlias);
+    public DocumentApiMetadataProvider(ModelsCatalog modelsCatalog, DataProvider dataProvider, String indexOrAlias) {
+        super("Document APIs", modelsCatalog, dataProvider, indexOrAlias);
     }
 
     @Override
@@ -26,12 +26,10 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
             Route.builder()
                 .method(HttpMethod.POST)
                 .apiPath(indexOrAliasPrepended("{type}"))
-                .parameters(asList(
-                    pathParam("type").build(),
-                    Parameter.builder()
-                        .paramType(ParameterType.BODY)
-                        .model(ModelsCatalog.OBJECT).build()
-                )).build()
+                .parameters(
+                    param("type", ParamType.PATH).build(),
+                    bodyParam(ModelsCatalog.OBJECT).build()
+                ).build()
         ));
 
         result.addAll(
@@ -42,19 +40,17 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                         .group("- " + model.getName())
                         .method(HttpMethod.POST)
                         .apiPath(indexOrAliasPrepended(model.getName()))
-                        .parameters(asList(
-                            Parameter.builder()
-                                .paramType(ParameterType.BODY)
-                                .model(model).build()
-                        ))
+                        .parameters(
+                            bodyParam(model).build()
+                        )
                         .description("The index API adds or updates a typed JSON document in a specific index, making it searchable")
                         .notes("The index operation can be executed without specifying the id. In such a case, an id will be generated automatically. In addition, the op_type will automatically be set to create. Here is an example (note the POST used instead of PUT):\n" +
-                            "\n" +
-                            "$ curl -XPOST 'http://localhost:9200/twitter/tweet/' -d '{\n" +
-                            "    \"user\" : \"kimchy\",\n" +
-                            "    \"post_date\" : \"2009-11-15T14:12:12\",\n" +
-                            "    \"message\" : \"trying out Elasticsearch\"\n" +
-                            "}'"
+                                "\n" +
+                                "$ curl -XPOST 'http://localhost:9200/twitter/tweet/' -d '{\n" +
+                                "    \"user\" : \"kimchy\",\n" +
+                                "    \"post_date\" : \"2009-11-15T14:12:12\",\n" +
+                                "    \"message\" : \"trying out Elasticsearch\"\n" +
+                                "}'"
                         )
                         .build(),
 
@@ -62,12 +58,10 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                         .group("- " + model.getName())
                         .method(HttpMethod.PUT)
                         .apiPath(indexOrAliasPrepended(model.getName()) + "/{id}")
-                        .parameters(asList(
-                            pathParam("id").build(),
-                            Parameter.builder()
-                                .paramType(ParameterType.BODY)
-                                .model(model).build()
-                        ))
+                        .parameters(
+                            param("id", ParamType.PATH).build(),
+                            bodyParam(model).build()
+                        )
                         .description("The index API adds or updates a typed JSON document in a specific index, making it searchable")
                         .notes("The following example inserts the JSON document into the \"twitter\" index, under a type called \"tweet\" with an id of 1:\n" +
                                 "\n" +
@@ -83,13 +77,13 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                         .group("- " + model.getName())
                         .method(HttpMethod.GET)
                         .apiPath(indexOrAliasPrepended(model.getName() + "/{id}"))
-                        .parameters(asList(
-                            pathParam("id").build()
-                        ))
+                        .parameters(
+                            param("id", ParamType.PATH).build()
+                        )
                         .description("The get API allows to get a typed JSON document from the index based on its id")
                         .notes("The following example gets a JSON document from an index called twitter, under a type called tweet, with id valued 1:\n" +
-                            "\n" +
-                            "$ curl -XGET 'http://localhost:9200/twitter/tweet/1'"
+                                "\n" +
+                                "$ curl -XGET 'http://localhost:9200/twitter/tweet/1'"
                         )
                         .model(getModelsCatalog().getDocumentModel(model)).build(),
 
@@ -97,13 +91,13 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                         .group("- " + model.getName())
                         .method(HttpMethod.DELETE)
                         .apiPath(indexOrAliasPrepended(model.getName() + "/{id}"))
-                        .parameters(asList(
-                            pathParam("id").build()
-                        ))
+                        .parameters(
+                            param("id", ParamType.PATH).build()
+                        )
                         .description("The delete API allows to delete a typed JSON document from a specific index based on its id")
                         .notes(" The following example deletes the JSON document from an index called twitter, under a type called tweet, with id valued 1:\n" +
-                            "\n" +
-                            "$ curl -XDELETE 'http://localhost:9200/twitter/tweet/1'"
+                                "\n" +
+                                "$ curl -XDELETE 'http://localhost:9200/twitter/tweet/1'"
                         )
                         .model(getModelsCatalog().DOCUMENT_METADATA).build(),
 
@@ -113,8 +107,8 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                         .apiPath(indexOrAliasPrepended(model.getName() + "/_search"))
                         .description("A search request can be executed purely using a URI by providing request parameters")
                         .notes("Not all search options are exposed when executing a search using this mode, but it can be handy for quick \"curl tests\". Here is an example:\n" +
-                            "\n" +
-                            "$ curl -XGET 'http://localhost:9200/twitter/tweet/_search?q=user:kimchy'"
+                                "\n" +
+                                "$ curl -XGET 'http://localhost:9200/twitter/tweet/_search?q=user:kimchy'"
                         )
                         .parameters(asList(
                             queryParam("q")
@@ -147,7 +141,8 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                                 .description("The starting from index of the hits to return. Defaults to 0").build(),
                             queryParam("size", Primitive.LONG)
                                 .description("The number of hits to return. Defaults to 10").build(),
-                            enumQueryParam("search_type", asList("dfs_query_then_fetch", "dfs_query_and_fetch", "query_then_fetch", "query_and_fetch", "count", "scan"))
+                            queryParam("search_type")
+                                .enumValues("dfs_query_then_fetch", "dfs_query_and_fetch", "query_then_fetch", "query_and_fetch", "count", "scan")
                                 .description("The type of the search operation to perform. Can be dfs_query_then_fetch, dfs_query_and_fetch, query_then_fetch, query_and_fetch, count, scan").build(),
                             queryParam("lowercase_expanded_terms", Primitive.BOOLEAN)
                                 .defaultValue("true")
@@ -155,7 +150,7 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                             queryParam("analyze_wildcard", Primitive.BOOLEAN)
                                 .defaultValue("false")
                                 .description("Should wildcard and prefix queries be analyzed or not. Defaults to false").build()
-                            ))
+                        ))
                         .model(getModelsCatalog().getDocumentModel(model)).build()
                 ))
                 .flatMap(r -> r.stream())

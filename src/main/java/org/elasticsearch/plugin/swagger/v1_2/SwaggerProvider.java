@@ -1,6 +1,5 @@
 package org.elasticsearch.plugin.swagger.v1_2;
 
-import lombok.Data;
 import net.itimothy.rest.description.Info;
 import net.itimothy.rest.description.Route;
 import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.ApiDeclaration;
@@ -9,7 +8,6 @@ import org.elasticsearch.plugin.swagger.v1_2.model.resourceListing.ResourceListi
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
 public class SwaggerProvider {
 
     private final Info info;

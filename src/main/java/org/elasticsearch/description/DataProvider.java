@@ -1,10 +1,10 @@
 package org.elasticsearch.description;
 
-import lombok.Getter;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.node.DiscoveryNode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -14,27 +14,33 @@ import static java.util.Arrays.asList;
  * Used to get lazy loaded, cached data from Elasticseach
  */
 class DataProvider {
-    @Getter
     private final Client client;
-
     private List<String> allIndices;
     private List<String> allAliases;
-    private ArrayList<String> allDocumentTypes;
     private DiscoveryNode currentNode;
 
     public DataProvider(Client client) {
         this.client = client;
     }
 
-    public List<String> getAllIndices() {
+    public Client getClient() {
+        return client;
+    }
 
+    public List<String> getAllIndices() {
         if (allIndices == null) {
-            allIndices = asList(
-                client.admin().indices()
-                    .prepareGetIndex()
-                    .get()
-                    .getIndices()
+            allIndices = new ArrayList<>();
+
+            allIndices.add("*");
+            allIndices.addAll(
+                Arrays.asList(client.admin().indices()
+                        .prepareGetIndex()
+                        .get()
+                        .getIndices()
+                )
             );
+
+            allIndices.sort(Comparator.naturalOrder());
         }
 
         return allIndices;
@@ -64,13 +70,12 @@ class DataProvider {
         return currentNode;
     }
 
-    public List<String> getAllIndicesAliasesAndWildcardExpessions() {
+    public List<String> getAllIndicesAndAliases() {
         List<String> result = new ArrayList<>();
 
         result.addAll(getAllIndices());
         result.addAll(getAllAliases());
         result.sort(Comparator.comparing(s -> s));
-        result.add("*");
         
         return result;        
     }

@@ -1,31 +1,33 @@
 package org.elasticsearch.description;
 
-import lombok.Getter;
-import lombok.experimental.Delegate;
-import net.itimothy.rest.description.Info;
-import net.itimothy.rest.description.Route;
+import net.itimothy.rest.description.*;
 import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.common.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Getter
 public abstract class ElasticSearchMetadataProvider {
-    private DataProvider dataProvider;
-    private String indexOrAlias;
+
+    private final DataProvider dataProvider;
+    private final String indexOrAlias;
     private final ModelsCatalog modelsCatalog;
     private final String defaultGroup;
 
-    @Delegate(types = ParametersFactory.class)
-    private final ParametersFactory parametersFactory;
-
-
-    protected ElasticSearchMetadataProvider(String defaultGroup, ModelsCatalog modelsCatalog, ParametersFactory parametersFactory, DataProvider dataProvider, String indexOrAlias) {
+    protected ElasticSearchMetadataProvider(String defaultGroup, ModelsCatalog modelsCatalog, DataProvider dataProvider, String indexOrAlias) {
         this.modelsCatalog = modelsCatalog;
         this.defaultGroup = defaultGroup;
-        this.parametersFactory = parametersFactory;
         this.dataProvider = dataProvider;
         this.indexOrAlias = indexOrAlias;
+    }
+
+    protected String getIndexOrAlias() {
+        return indexOrAlias;
+    }
+
+    protected ModelsCatalog getModelsCatalog() {
+        return modelsCatalog;
     }
 
     public List<Route> getRoutes() {
@@ -36,7 +38,7 @@ public abstract class ElasticSearchMetadataProvider {
                 route.setGroup(defaultGroup);
             }
         }
-        
+
         // TODO: modify the result to remove every Description object which does not matches 
         //       the current node's version of Elasticsearch
 
@@ -65,5 +67,72 @@ public abstract class ElasticSearchMetadataProvider {
 
     protected String indexOrAliasPrepended(String apiPath) {
         return getIndexOrAlias() != null ? getIndexOrAlias() + "/" + apiPath : apiPath;
+    }
+
+    public Parameter.ParameterBuilder param(String name, ParamType paramType) {
+        return Parameter.builder()
+            .name(name)
+            .paramType(paramType)
+            .model(Primitive.STRING);
+    }
+
+    public Parameter.ParameterBuilder pathParam(String name) {
+        return param(name, ParamType.PATH);
+    }
+
+    public Parameter.ParameterBuilder bodyParam(Model model) {
+        return param("body", ParamType.BODY)
+            .model(model);
+    }
+
+    public Parameter.ParameterBuilder queryParam(String name) {
+        return param(name, ParamType.QUERY);
+    }
+
+    public Parameter.ParameterBuilder queryParam(String name, Model model) {
+        return queryParam(name)
+            .model(model);
+    }
+
+    public Parameter.ParameterBuilder indexParam(String name, ParamType paramType) {
+        return param(name, paramType)
+            .description("Name of the index")
+            .allowMultiple(true);
+    }
+
+    public Parameter.ParameterBuilder indexSelectParam(String name, ParamType paramType) {
+        return indexParam(name, paramType)
+            .enumValues(dataProvider.getAllIndices());
+    }
+
+    public Parameter.ParameterBuilder indexOrAliasParam(String name, ParamType paramType) {
+        return param(name, paramType)
+            .description("blank | * | _all | glob pattern | name1, name2, …")
+            .allowMultiple(true);
+    }
+
+    public Parameter.ParameterBuilder indexOrAliasSelectParam(String name, ParamType paramType) {
+        return indexParam(name, paramType)
+            .enumValues(dataProvider.getAllIndicesAndAliases());
+    }
+
+    public Parameter.ParameterBuilder enumParam(String name, ParamType paramType, List<String> values) {
+        return param(name, paramType)
+            .enumValues(values);
+    }
+
+    public Parameter.ParameterBuilder enumParam(String name, ParamType paramType, String... values) {
+        return enumParam(name, paramType, Arrays.asList(values));
+    }
+
+    public Parameter.ParameterBuilder typeSelectParam(String name, ParamType paramType) {
+        return enumParam(
+            name,
+            paramType,
+            modelsCatalog.getTypeModels().stream()
+                .map(m -> m.getName())
+                .distinct()
+                .collect(Collectors.toList())
+        ).allowMultiple(true);
     }
 }

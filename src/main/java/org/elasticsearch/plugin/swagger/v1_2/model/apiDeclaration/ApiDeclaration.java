@@ -1,6 +1,5 @@
 package org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration;
 
-import lombok.*;
 import org.elasticsearch.plugin.swagger.v1_2.model.SwaggerModel;
 import org.elasticsearch.plugin.swagger.v1_2.model.resourceListing.Authorization;
 
@@ -10,16 +9,11 @@ import java.util.Map;
 /**
  * The API Declaration provides information about an API exposed on a resource.
  */
-@Data
-@Builder
-@NoArgsConstructor
-@RequiredArgsConstructor
-@AllArgsConstructor
 public class ApiDeclaration extends SwaggerModel {
+
     /**
      * Provides the version of the application API.
      */
-    @NonNull
     private String apiVersion;
 
     /**
@@ -29,14 +23,11 @@ public class ApiDeclaration extends SwaggerModel {
      * the API server itself, so the URL for serving the API cannot always be derived from the URL
      * serving the API specification.
      */
-    @NonNull
     private String basePath;
 
     /**
      * A list of the APIs exposed on this resource.
      */
-    @NonNull
-    @Singular("api")
     private List<Api> apis;
 
     /**
@@ -54,8 +45,6 @@ public class ApiDeclaration extends SwaggerModel {
      * A list of the models available to this resource. Note that these need to be exposed
      * separately for each API Declaration.
      */
-    @NonNull
-    @Singular("model")
     private Map<String, Model> models;
 
     /**
@@ -76,4 +65,312 @@ public class ApiDeclaration extends SwaggerModel {
      * described here, it means they're all applied.
      */
     private List<Authorization> authorizations;
+
+    public ApiDeclaration() {
+    }
+
+    public ApiDeclaration(final String apiVersion, final String basePath, final List<Api> apis, final String resourcePath, final String swaggerVersion, final Map<String, Model> models, final List<String> produces, final List<String> consumes, final List<Authorization> authorizations) {
+        if (apiVersion == null) {
+            throw new NullPointerException("apiVersion");
+        }
+        if (basePath == null) {
+            throw new NullPointerException("basePath");
+        }
+        if (apis == null) {
+            throw new NullPointerException("apis");
+        }
+        if (models == null) {
+            throw new NullPointerException("models");
+        }
+        this.apiVersion = apiVersion;
+        this.basePath = basePath;
+        this.apis = apis;
+        this.resourcePath = resourcePath;
+        this.swaggerVersion = swaggerVersion;
+        this.models = models;
+        this.produces = produces;
+        this.consumes = consumes;
+        this.authorizations = authorizations;
+    }
+
+    public static ApiDeclarationBuilder builder() {
+        return new ApiDeclarationBuilder();
+    }
+
+    public String getApiVersion() {
+        return this.apiVersion;
+    }
+
+    public void setApiVersion(final String apiVersion) {
+        if (apiVersion == null) {
+            throw new NullPointerException("apiVersion");
+        }
+        this.apiVersion = apiVersion;
+    }
+
+    public List<Api> getApis() {
+        return this.apis;
+    }
+
+    public void setApis(final List<Api> apis) {
+        if (apis == null) {
+            throw new NullPointerException("apis");
+        }
+        this.apis = apis;
+    }
+
+    public List<Authorization> getAuthorizations() {
+        return this.authorizations;
+    }
+
+    public void setAuthorizations(final List<Authorization> authorizations) {
+        this.authorizations = authorizations;
+    }
+
+    public String getBasePath() {
+        return this.basePath;
+    }
+
+    public void setBasePath(final String basePath) {
+        if (basePath == null) {
+            throw new NullPointerException("basePath");
+        }
+        this.basePath = basePath;
+    }
+
+    public List<String> getConsumes() {
+        return this.consumes;
+    }
+
+    public void setConsumes(final List<String> consumes) {
+        this.consumes = consumes;
+    }
+
+    public Map<String, Model> getModels() {
+        return this.models;
+    }
+
+    public void setModels(final Map<String, Model> models) {
+        if (models == null) {
+            throw new NullPointerException("models");
+        }
+        this.models = models;
+    }
+
+    public List<String> getProduces() {
+        return this.produces;
+    }
+
+    public void setProduces(final List<String> produces) {
+        this.produces = produces;
+    }
+
+    public String getResourcePath() {
+        return this.resourcePath;
+    }
+
+    public void setResourcePath(final String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
+
+    public String getSwaggerVersion() {
+        return this.swaggerVersion;
+    }
+
+    public void setSwaggerVersion(final String swaggerVersion) {
+        this.swaggerVersion = swaggerVersion;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = apiVersion != null ? apiVersion.hashCode() : 0;
+        result = 31 * result + (basePath != null ? basePath.hashCode() : 0);
+        result = 31 * result + (apis != null ? apis.hashCode() : 0);
+        result = 31 * result + (resourcePath != null ? resourcePath.hashCode() : 0);
+        result = 31 * result + (swaggerVersion != null ? swaggerVersion.hashCode() : 0);
+        result = 31 * result + (models != null ? models.hashCode() : 0);
+        result = 31 * result + (produces != null ? produces.hashCode() : 0);
+        result = 31 * result + (consumes != null ? consumes.hashCode() : 0);
+        result = 31 * result + (authorizations != null ? authorizations.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ApiDeclaration)) return false;
+
+        ApiDeclaration that = (ApiDeclaration) o;
+
+        if (apiVersion != null ? !apiVersion.equals(that.apiVersion) : that.apiVersion != null)
+            return false;
+        if (apis != null ? !apis.equals(that.apis) : that.apis != null) return false;
+        if (authorizations != null ? !authorizations.equals(that.authorizations) : that.authorizations != null)
+            return false;
+        if (basePath != null ? !basePath.equals(that.basePath) : that.basePath != null)
+            return false;
+        if (consumes != null ? !consumes.equals(that.consumes) : that.consumes != null)
+            return false;
+        if (models != null ? !models.equals(that.models) : that.models != null) return false;
+        if (produces != null ? !produces.equals(that.produces) : that.produces != null)
+            return false;
+        if (resourcePath != null ? !resourcePath.equals(that.resourcePath) : that.resourcePath != null)
+            return false;
+        if (swaggerVersion != null ? !swaggerVersion.equals(that.swaggerVersion) : that.swaggerVersion != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ApiDeclaration{" +
+            "apiVersion='" + apiVersion + '\'' +
+            ", basePath='" + basePath + '\'' +
+            ", apis=" + apis +
+            ", resourcePath='" + resourcePath + '\'' +
+            ", swaggerVersion='" + swaggerVersion + '\'' +
+            ", models=" + models +
+            ", produces=" + produces +
+            ", consumes=" + consumes +
+            ", authorizations=" + authorizations +
+            '}';
+    }
+
+    public static class ApiDeclarationBuilder {
+
+        private String apiVersion;
+        private String basePath;
+        private java.util.ArrayList<Api> apis;
+        private String resourcePath;
+        private String swaggerVersion;
+        private java.util.ArrayList<String> models$key;
+        private java.util.ArrayList<Model> models$value;
+        private List<String> produces;
+        private List<String> consumes;
+        private List<Authorization> authorizations;
+
+        ApiDeclarationBuilder() {
+        }
+
+        public ApiDeclarationBuilder api(final Api api) {
+            if (this.apis == null) this.apis = new java.util.ArrayList<Api>();
+            this.apis.add(api);
+            return this;
+        }
+
+        public ApiDeclarationBuilder apiVersion(final String apiVersion) {
+            this.apiVersion = apiVersion;
+            return this;
+        }
+
+        public ApiDeclarationBuilder apis(final java.util.Collection<? extends Api> apis) {
+            if (this.apis == null) this.apis = new java.util.ArrayList<Api>();
+            this.apis.addAll(apis);
+            return this;
+        }
+
+        public ApiDeclarationBuilder authorizations(final List<Authorization> authorizations) {
+            this.authorizations = authorizations;
+            return this;
+        }
+
+        public ApiDeclarationBuilder basePath(final String basePath) {
+            this.basePath = basePath;
+            return this;
+        }
+
+        public ApiDeclaration build() {
+            List<Api> apis;
+            switch (this.apis == null ? 0 : this.apis.size()) {
+                case 0:
+                    apis = java.util.Collections.emptyList();
+                    break;
+
+                case 1:
+                    apis = java.util.Collections.singletonList(this.apis.get(0));
+                    break;
+
+                default:
+                    apis = java.util.Collections.unmodifiableList(new java.util.ArrayList<Api>(this.apis));
+
+            }
+            Map<String, Model> models;
+            switch (this.models$key == null ? 0 : this.models$key.size()) {
+                case 0:
+                    models = java.util.Collections.emptyMap();
+                    break;
+
+                case 1:
+                    models = java.util.Collections.singletonMap(this.models$key.get(0), this.models$value.get(0));
+                    break;
+
+                default:
+                    models = new java.util.LinkedHashMap<String, Model>(this.models$key.size() < 1073741824 ? 1 + this.models$key.size() + (this.models$key.size() - 3) / 3 : Integer.MAX_VALUE);
+                    for (int $i = 0; $i < this.models$key.size(); $i++)
+                        models.put(this.models$key.get($i), this.models$value.get($i));
+                    models = java.util.Collections.unmodifiableMap(models);
+
+            }
+            return new ApiDeclaration(apiVersion, basePath, apis, resourcePath, swaggerVersion, models, produces, consumes, authorizations);
+        }
+
+        public ApiDeclarationBuilder consumes(final List<String> consumes) {
+            this.consumes = consumes;
+            return this;
+        }
+
+        public ApiDeclarationBuilder model(final String modelKey, final Model modelValue) {
+            if (this.models$key == null) {
+                this.models$key = new java.util.ArrayList<String>();
+                this.models$value = new java.util.ArrayList<Model>();
+            }
+            this.models$key.add(modelKey);
+            this.models$value.add(modelValue);
+            return this;
+        }
+
+        public ApiDeclarationBuilder models(final Map<? extends String, ? extends Model> models) {
+            if (this.models$key == null) {
+                this.models$key = new java.util.ArrayList<String>();
+                this.models$value = new java.util.ArrayList<Model>();
+            }
+            for (final Map.Entry<? extends String, ? extends Model> $lombokEntry : models.entrySet()) {
+                this.models$key.add($lombokEntry.getKey());
+                this.models$value.add($lombokEntry.getValue());
+            }
+            return this;
+        }
+
+        public ApiDeclarationBuilder produces(final List<String> produces) {
+            this.produces = produces;
+            return this;
+        }
+
+        public ApiDeclarationBuilder resourcePath(final String resourcePath) {
+            this.resourcePath = resourcePath;
+            return this;
+        }
+
+        public ApiDeclarationBuilder swaggerVersion(final String swaggerVersion) {
+            this.swaggerVersion = swaggerVersion;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return "ApiDeclarationBuilder{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", basePath='" + basePath + '\'' +
+                ", apis=" + apis +
+                ", resourcePath='" + resourcePath + '\'' +
+                ", swaggerVersion='" + swaggerVersion + '\'' +
+                ", models$key=" + models$key +
+                ", models$value=" + models$value +
+                ", produces=" + produces +
+                ", consumes=" + consumes +
+                ", authorizations=" + authorizations +
+                '}';
+        }
+    }
 }
