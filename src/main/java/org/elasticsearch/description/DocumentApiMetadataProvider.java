@@ -1,6 +1,10 @@
 package org.elasticsearch.description;
 
-import net.itimothy.rest.description.*;
+import net.itimothy.rest.description.HttpMethod;
+import net.itimothy.rest.description.ParamType;
+import net.itimothy.rest.description.Primitive;
+import net.itimothy.rest.description.Route;
+import org.elasticsearch.client.Client;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,8 +14,8 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 
 public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public DocumentApiMetadataProvider(ModelsCatalog modelsCatalog, DataProvider dataProvider, String indexOrAlias) {
-        super("Document APIs", modelsCatalog, dataProvider, indexOrAlias);
+    public DocumentApiMetadataProvider(ModelsCatalog modelsCatalog, Client client, String indexOrAlias) {
+        super("Document APIs", client, modelsCatalog, indexOrAlias);
     }
 
     @Override

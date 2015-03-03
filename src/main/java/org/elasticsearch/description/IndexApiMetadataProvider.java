@@ -4,14 +4,15 @@ import net.itimothy.rest.description.HttpMethod;
 import net.itimothy.rest.description.ParamType;
 import net.itimothy.rest.description.Response;
 import net.itimothy.rest.description.Route;
+import org.elasticsearch.client.Client;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
 class IndexApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public IndexApiMetadataProvider(ModelsCatalog modelsCatalog, DataProvider dataProvider, String indexOrAlias) {
-        super("Index APIs", modelsCatalog, dataProvider, indexOrAlias);
+    public IndexApiMetadataProvider(ModelsCatalog modelsCatalog, Client client, String indexOrAlias) {
+        super("Index APIs", client, modelsCatalog, indexOrAlias);
     }
 
     @Override

@@ -15,30 +15,21 @@ public class MainApiMetadataProvider extends ElasticSearchMetadataProvider {
 
     private final List<ElasticSearchMetadataProvider> metadataProviders;
 
-    public MainApiMetadataProvider(Client client) {
-        this(new DataProvider(client), null);
-    }
-
     public MainApiMetadataProvider(Client client, String indexOrAlias) {
-        this(new DataProvider(client), indexOrAlias);
-    }
-
-    private MainApiMetadataProvider(DataProvider dataProvider, String indexOrAlias) {
-        this(dataProvider, new ModelsCatalog(dataProvider, indexOrAlias), indexOrAlias);
+        this(client, new ModelsCatalog(client, indexOrAlias), indexOrAlias);
     }
     
-    public MainApiMetadataProvider(DataProvider dataProvider, ModelsCatalog modelsCatalog, String indexOrAlias) {
+    public MainApiMetadataProvider(Client client, ModelsCatalog modelsCatalog, String indexOrAlias) {
         super("Elasticsearch",
-            modelsCatalog,
-            dataProvider,
+            client, modelsCatalog,
             indexOrAlias
         );
 
         this.metadataProviders = asList(
-            new IndexApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias),
-            new MappingApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias),
-            new AliasApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias),
-            new DocumentApiMetadataProvider(getModelsCatalog(), dataProvider, indexOrAlias)
+            new IndexApiMetadataProvider(getModelsCatalog(), client, indexOrAlias),
+            new MappingApiMetadataProvider(getModelsCatalog(), client, indexOrAlias),
+            new AliasApiMetadataProvider(getModelsCatalog(), client, indexOrAlias),
+            new DocumentApiMetadataProvider(getModelsCatalog(), client, indexOrAlias)
         );
     }
 

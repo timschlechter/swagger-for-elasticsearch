@@ -3,14 +3,15 @@ package org.elasticsearch.description;
 import net.itimothy.rest.description.HttpMethod;
 import net.itimothy.rest.description.ParamType;
 import net.itimothy.rest.description.Route;
+import org.elasticsearch.client.Client;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
 class AliasApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public AliasApiMetadataProvider(ModelsCatalog modelsCatalog, DataProvider dataProvider, String indexOrAlias) {
-        super("Alias APIs", modelsCatalog, dataProvider, indexOrAlias);
+    public AliasApiMetadataProvider(ModelsCatalog modelsCatalog, Client client, String indexOrAlias) {
+        super("Alias APIs", client, modelsCatalog, indexOrAlias);
     }
 
     @Override

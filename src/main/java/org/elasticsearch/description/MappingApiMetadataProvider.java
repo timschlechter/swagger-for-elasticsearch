@@ -1,9 +1,10 @@
 package org.elasticsearch.description;
 
 import net.itimothy.rest.description.HttpMethod;
-import net.itimothy.rest.description.Parameter;
 import net.itimothy.rest.description.ParamType;
+import net.itimothy.rest.description.Parameter;
 import net.itimothy.rest.description.Route;
+import org.elasticsearch.client.Client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 class MappingApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public MappingApiMetadataProvider(ModelsCatalog modelsCatalog, DataProvider dataProvider, String indexOrAlias) {
-        super("Mapping APIs", modelsCatalog, dataProvider, indexOrAlias);
+    public MappingApiMetadataProvider(ModelsCatalog modelsCatalog, Client client, String indexOrAlias) {
+        super("Mapping APIs", client, modelsCatalog, indexOrAlias);
     }
 
     @Override

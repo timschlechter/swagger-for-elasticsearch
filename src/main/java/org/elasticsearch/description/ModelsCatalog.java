@@ -4,6 +4,7 @@ import net.itimothy.rest.description.Model;
 import net.itimothy.rest.description.Primitive;
 import net.itimothy.rest.description.Property;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.hppc.cursors.ObjectCursor;
@@ -19,14 +20,14 @@ import static java.util.Arrays.asList;
 
 public class ModelsCatalog {
 
-    private final DataProvider dataProvider;
+    private final Client client;
     private String indexOrAlias;
 
     Map<String, List<Model>> indexTypeModelsMap;
     Map<String, List<Model>> indexDocumentModelsMap;
 
-    public ModelsCatalog(DataProvider dataProvider, String indexOrAlias) {
-        this.dataProvider = dataProvider;
+    public ModelsCatalog(Client client, String indexOrAlias) {
+        this.client = client;
         this.indexOrAlias = indexOrAlias;
     }
 
@@ -34,7 +35,7 @@ public class ModelsCatalog {
         if (indexTypeModelsMap == null) {
             indexTypeModelsMap = new HashMap<>();
 
-            GetMappingsResponse getMappingsResponse = dataProvider.getClient().admin().indices().prepareGetMappings().get();
+            GetMappingsResponse getMappingsResponse = client.admin().indices().prepareGetMappings().get();
 
             ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> indexTypeMappings = getMappingsResponse.getMappings();
             for (ObjectCursor<String> indexCursor : indexTypeMappings.keys()) {
