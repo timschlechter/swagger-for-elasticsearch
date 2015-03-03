@@ -1,6 +1,8 @@
 Swagger plugin for Elasticsearch
 ================================
-Provides [Swagger](http://swagger.io/) documentation for your Elasticsearch cluster. Makes it real easy to discover and learn the possibilities of the Elasticsearch API.
+Provides [Swagger](http://swagger.io/) documentation for your Elasticsearch cluster.
+
+__Note:__ This plugin does not aim to be the ultimate management tool for Elasticsearch, there are [far better plugins for doing this](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-plugins.html#known-plugins). It tries to make it easy to discover and learn about the APIs, and makes it possible to invoke/test APIs quickly.
 
 ### Features###
 * API documentation per index/alias
