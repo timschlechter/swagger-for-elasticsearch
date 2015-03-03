@@ -68,7 +68,7 @@ class IndexApiMetadataProvider extends ElasticSearchMetadataProvider {
                 .method(HttpMethod.PUT)
                 .apiPath("{index}")
                 .description("Creates a new index")
-                .notes("The create index API allows to instantiate an index. Elasticsearch provides support for multiple indices, including executing operations across several indices.")
+                .notes("The create index API allows to instantiate an index. Elasticsearch provides support for isCollection indices, including executing operations across several indices.")
                 .parameters(
                     indexParam("index", ParamType.PATH).build()
                 ).build(),

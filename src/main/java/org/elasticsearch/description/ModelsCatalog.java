@@ -25,6 +25,7 @@ public class ModelsCatalog {
 
     Map<String, List<Model>> indexTypeModelsMap;
     Map<String, List<Model>> indexDocumentModelsMap;
+    Map<String, List<Model>> indexDocumentSearchResultModelsMap;
 
     public ModelsCatalog(Client client, String indexOrAlias) {
         this.client = client;
@@ -136,6 +137,53 @@ public class ModelsCatalog {
         return indexDocumentModelsMap;
     }
 
+    public Map<String, List<Model>> getIndexDocumentSearchResultModelsMap() {
+        if (indexDocumentSearchResultModelsMap == null) {
+            indexDocumentSearchResultModelsMap = getIndexTypeModelsMap().entrySet().stream()
+                .collect(
+                    Collectors.toMap(
+                        e -> e.getKey(),
+                        e -> {
+                            String indexName = e.getKey();
+                            List<Model> typeModels = e.getValue();
+
+                            return typeModels.stream()
+                                .map(m ->
+                                        Model.builder()
+                                            .id(getDocumentSearchResultModelId(indexName, m.getName()))
+                                            .properties(
+                                                Property.builder()
+                                                    .name("shards")
+                                                    .required(true)
+                                                    .model(SHARD_INFO).build(),
+                                                Property.builder()
+                                                    .name("hits")
+                                                    .required(true)
+                                                    .model(
+                                                        Model.builder()
+                                                            .id("hits")
+                                                            .properties(
+                                                                Property.builder()
+                                                                    .name("total")
+                                                                    .required(true)
+                                                                    .model(Primitive.INTEGER).build(),
+                                                                Property.builder()
+                                                                    .name("hits")
+                                                                    .required(true)
+                                                                    .model(getDocumentModel(m))
+                                                                    .isCollection(true).build()
+                                                            ).build()
+                                                    ).build()
+                                            ).build()
+                                ).collect(Collectors.toList());
+                        }
+                    )
+                );
+        }
+
+        return indexDocumentSearchResultModelsMap;
+    }
+
     public List<Model> getTypeModels() {
         return getIndexTypeModelsMap().values().stream()
             .flatMap(m -> m.stream())
@@ -180,6 +228,27 @@ public class ModelsCatalog {
         return getDocumentModel(indexName, typeModel.getName());
     }
 
+    public Model getDocumentSearchResultModel(String index, String typeName) {
+        if (getIndexDocumentSearchResultModelsMap().containsKey(index)) {
+            return getIndexDocumentSearchResultModelsMap().get(index).stream()
+                .filter(m -> m.getId().equals(getDocumentSearchResultModelId(index, typeName)))
+                .findFirst()
+                .orElse(null);
+        }
+
+        return null;
+    }
+
+    public Model getDocumentSearchResultModel(Model typeModel) {
+        String indexName = getIndexTypeModelsMap().entrySet().stream()
+            .filter(e -> e.getValue().contains(typeModel))
+            .map(e -> e.getKey())
+            .findFirst()
+            .orElse(null);
+
+        return getDocumentSearchResultModel(indexName, typeModel.getName());
+    }
+
     private static Model mappingTypeToModel(String mappingType) {
         switch (mappingType) {
             case "string":
@@ -209,6 +278,11 @@ public class ModelsCatalog {
         return getTypeModelId(index, typeName) + "Document";
     }
 
+    private static String getDocumentSearchResultModelId(String index, String typeName) {
+        return getDocumentModelId(index, typeName) + "SearchResult";
+    }
+
+    
     public static final Model MAPPING_PROPERTY = Model.builder()
         .id("mapping-property")
         .properties(asList(
@@ -358,4 +432,49 @@ public class ModelsCatalog {
                 .required(true)
                 .model(Primitive.BOOLEAN).build()
         )).build();
+
+
+    public static final Model SHARD_INFO = Model.builder()
+        .id("shard-info")
+        .properties(
+            Property.builder()
+                .name("total")
+                .required(true)
+                .model(Primitive.INTEGER).build(),
+            Property.builder()
+                .name("successful")
+                .required(true)
+                .model(Primitive.INTEGER).build(),
+            Property.builder()
+                .name("failed")
+                .required(true)
+                .model(Primitive.INTEGER).build()
+        ).build();
+
+    public static final Model HITS = Model.builder()
+        .id("hits")
+        .properties(
+            Property.builder()
+                .name("total")
+                .required(true)
+                .model(Primitive.INTEGER).build(),
+            Property.builder()
+                .name("hits")
+                .required(true)
+                .model(DOCUMENT_METADATA)
+                .isCollection(true).build()
+        ).build();
+    
+    public static final Model SEARCH_RESULT = Model.builder()
+        .id("search-result")
+        .properties(
+            Property.builder()
+                .name("shards")                
+                .required(true)
+                .model(SHARD_INFO).build(),
+            Property.builder()
+                .name("hits")
+                .required(true)
+                .model(HITS).build()
+        ).build();
 }

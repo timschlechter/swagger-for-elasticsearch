@@ -61,7 +61,7 @@ public class ApiDeclaration extends SwaggerModel {
 
     /**
      * A list of authorizations schemes required for the operations listed in this API declaration.
-     * Individual operations may override this setting. If there are multiple authorization schemes
+     * Individual operations may override this setting. If there are isCollection authorization schemes
      * described here, it means they're all applied.
      */
     private List<Authorization> authorizations;

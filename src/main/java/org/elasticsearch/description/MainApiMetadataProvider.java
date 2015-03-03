@@ -29,6 +29,7 @@ public class MainApiMetadataProvider extends ElasticSearchMetadataProvider {
             new IndexApiMetadataProvider(getModelsCatalog(), client, indexOrAlias),
             new MappingApiMetadataProvider(getModelsCatalog(), client, indexOrAlias),
             new AliasApiMetadataProvider(getModelsCatalog(), client, indexOrAlias),
+            new SearchApiMetadataProvider(getModelsCatalog(), client, indexOrAlias),
             new DocumentApiMetadataProvider(getModelsCatalog(), client, indexOrAlias)
         );
     }

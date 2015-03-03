@@ -2,6 +2,7 @@ package org.elasticsearch.plugin.swagger.v1_2;
 
 import net.itimothy.rest.description.*;
 import org.elasticsearch.common.lang3.StringUtils;
+import org.elasticsearch.plugin.swagger.v1_2.model.Items;
 import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.*;
 import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.HttpMethod;
 import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.Model;
@@ -112,7 +113,7 @@ public class SwaggerMetadataConverter {
                     ? parameter.getRequired()
                     : false
             )
-            ._enum(parameter.getEnumValues())
+            .enumValues(parameter.getEnumValues())
             .build();
     }
 
@@ -216,11 +217,32 @@ public class SwaggerMetadataConverter {
     private ModelProperty toModelProperty(Property property) {
         net.itimothy.rest.description.Model model = property.getModel();
         Primitive primitive = model instanceof Primitive ? (Primitive) model : null;
-        return ModelProperty.builder()
+        ModelProperty.ModelPropertyBuilder modelProperty = ModelProperty.builder()
             .name(property.getName())
-            .description(property.getDescription())
-            .type(primitive != null ? primitive.getType() : null)
-            .ref(primitive == null ? model.getId() : null).build();
+            .description(property.getDescription());
+        
+        if (property.getIsCollection() != null && property.getIsCollection()) {
+            modelProperty.type("array");
+                        
+            if (primitive != null) {
+                modelProperty.items(
+                    Items.builder()
+                        .type(primitive.getType())
+                        .format(primitive.getFormat()).build()                    
+                );
+            } else {
+                modelProperty.items(
+                    Items.builder()
+                        .ref(model.getId()).build()
+                );                    
+            }
+        } else {
+            modelProperty
+                .type(primitive != null ? primitive.getType() : null)
+                .ref(primitive == null ? model.getId() : null);    
+        }
+        
+        return modelProperty.build();
     }
 
     private static String toCamelCase(final String value) {
@@ -242,6 +264,6 @@ public class SwaggerMetadataConverter {
                 Info.builder()
                     .title(info.getTitle())
                     .description(info.getDescription()).build()
-            ) .build();
+            ).build();
     }
 }

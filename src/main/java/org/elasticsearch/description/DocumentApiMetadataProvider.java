@@ -2,7 +2,6 @@ package org.elasticsearch.description;
 
 import net.itimothy.rest.description.HttpMethod;
 import net.itimothy.rest.description.ParamType;
-import net.itimothy.rest.description.Primitive;
 import net.itimothy.rest.description.Route;
 import org.elasticsearch.client.Client;
 
@@ -114,48 +113,8 @@ public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
                                 "\n" +
                                 "$ curl -XGET 'http://localhost:9200/twitter/tweet/_search?q=user:kimchy'"
                         )
-                        .parameters(asList(
-                            queryParam("q")
-                                .description("The query string").build(),
-                            queryParam("df")
-                                .description("The default field to use when no field prefix is defined within the query").build(),
-                            queryParam("analyzer")
-                                .description("The analyzer name to be used when analyzing the query string").build(),
-                            queryParam("default_operator")
-                                .description("The default operator to be used, can be AND or OR. Defaults to OR").build(),
-                            queryParam("explain", Primitive.BOOLEAN)
-                                .defaultValue("false")
-                                .description("For each hit, contain an explanation of how scoring of the hits was computed").build(),
-                            queryParam("_source", Primitive.BOOLEAN)
-                                .defaultValue("true")
-                                .description("Set to false to disable retrieval of the _source field. You can also retrieve part of the document by using _source_include & _source_exclude (see the request body documentation for more details)").build(),
-                            queryParam("fields")
-                                .description("The selective stored fields of the document to return for each hit, comma delimited. Not specifying any value will cause no fields to return").build(),
-                            queryParam("sort")
-                                .description("Sorting to perform. Can either be in the form of fieldName, or fieldName:asc/fieldName:desc. The fieldName can either be an actual field within the document, or the special _score name to indicate sorting based on scores. There can be several sort parameters (order is important)").build(),
-                            queryParam("track_scores", Primitive.BOOLEAN)
-                                .defaultValue("false")
-                                .description("When sorting, set to true in order to still track scores and return them as part of each hit").build(),
-                            queryParam("timeout", Primitive.LONG)
-                                .description("A search timeout, bounding the search request to be executed within the specified time value and bail with the hits accumulated up to that point when expired. Defaults to no timeout").build(),
-                            queryParam("terminate_after", Primitive.LONG)
-                                .minVersion("1.4.0.Beta1")
-                                .description("The maximum number of documents to collect for each shard, upon reaching which the query execution will terminate early. If set, the response will have a boolean field terminated_early to indicate whether the query execution has actually terminated_early. Defaults to no terminate_after").build(),
-                            queryParam("from", Primitive.LONG)
-                                .description("The starting from index of the hits to return. Defaults to 0").build(),
-                            queryParam("size", Primitive.LONG)
-                                .description("The number of hits to return. Defaults to 10").build(),
-                            queryParam("search_type")
-                                .enumValues("dfs_query_then_fetch", "dfs_query_and_fetch", "query_then_fetch", "query_and_fetch", "count", "scan")
-                                .description("The type of the search operation to perform. Can be dfs_query_then_fetch, dfs_query_and_fetch, query_then_fetch, query_and_fetch, count, scan").build(),
-                            queryParam("lowercase_expanded_terms", Primitive.BOOLEAN)
-                                .defaultValue("true")
-                                .description("Should terms be automatically lowercased or not. Defaults to true").build(),
-                            queryParam("analyze_wildcard", Primitive.BOOLEAN)
-                                .defaultValue("false")
-                                .description("Should wildcard and prefix queries be analyzed or not. Defaults to false").build()
-                        ))
-                        .model(getModelsCatalog().getDocumentModel(model)).build()
+                        .parameters(defaultUriSearchParams())
+                        .model(getModelsCatalog().getDocumentSearchResultModel(model)).build()
                 ))
                 .flatMap(r -> r.stream())
                 .collect(Collectors.toList())

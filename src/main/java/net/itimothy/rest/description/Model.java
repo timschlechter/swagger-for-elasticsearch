@@ -1,5 +1,6 @@
 package net.itimothy.rest.description;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Model extends Description {
@@ -135,6 +136,10 @@ public class Model extends Description {
         public ModelBuilder properties(final List<Property> properties) {
             this.properties = properties;
             return this;
+        }
+
+        public ModelBuilder properties(final Property... properties) {
+            return properties(Arrays.asList(properties));
         }
 
         @Override

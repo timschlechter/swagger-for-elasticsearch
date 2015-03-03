@@ -1,6 +1,9 @@
 package org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration;
 
 import org.elasticsearch.plugin.swagger.v1_2.model.DataType;
+import org.elasticsearch.plugin.swagger.v1_2.model.Items;
+
+import java.util.List;
 
 /**
  * A Property Object holds the definition of a new property for a model.
@@ -17,8 +20,8 @@ public class ModelProperty extends DataType {
      */
     private String description;
 
-    public ModelProperty(String type, String ref, String name, String description) {
-        super(type, ref);
+    public ModelProperty(final String type, final String ref, final String format, final Object defaultValue, final List<String> enumValues, final Long minimum, final Long maximum, final Items items, final Boolean uniqueItems, String name, String description) {
+        super(type, ref, format, defaultValue, enumValues, minimum, maximum, items, uniqueItems);
         this.name = name;
         this.description = description;
     }
@@ -81,18 +84,41 @@ public class ModelProperty extends DataType {
 
         private String type;
         private String ref;
+        private String format;
+        private Object defaultValue;
+        private Long minimum;
+        private Long maximum;
+        private Items items;
+        private Boolean uniqueItems;
+        private Boolean required;
         private String name;
         private String description;
+        private List<String> enumValues;
 
         ModelPropertyBuilder() {
         }
 
         public ModelProperty build() {
-            return new ModelProperty(type, ref, name, description);
+            return new ModelProperty(type, ref, format, defaultValue, enumValues, minimum, maximum, items, uniqueItems, name, description);
+        }
+
+        public ModelPropertyBuilder uniqueItems(final Boolean uniqueItems) {
+            this.uniqueItems = uniqueItems;
+            return this;
+        }
+
+        public ModelPropertyBuilder enumValues(final List<String> enumValues) {
+            this.enumValues = enumValues;
+            return this;
         }
 
         public ModelPropertyBuilder description(final String description) {
             this.description = description;
+            return this;
+        }
+
+        public ModelPropertyBuilder type(final String type) {
+            this.type = type;
             return this;
         }
 
@@ -101,23 +127,38 @@ public class ModelProperty extends DataType {
             return this;
         }
 
+        public ModelPropertyBuilder defaultValue(final Object defaultValue) {
+            this.defaultValue = defaultValue;
+            return this;
+        }
+
+        public ModelPropertyBuilder format(final String format) {
+            this.format = format;
+            return this;
+        }
+
+        public ModelPropertyBuilder items(final Items items) {
+            this.items = items;
+            return this;
+        }
+
+        public ModelPropertyBuilder maximum(final Long maximum) {
+            this.maximum = maximum;
+            return this;
+        }
+
+        public ModelPropertyBuilder minimum(final Long minimum) {
+            this.minimum = minimum;
+            return this;
+        }
+
         public ModelPropertyBuilder ref(final String ref) {
             this.ref = ref;
             return this;
         }
 
-        @Override
-        public String toString() {
-            return "ModelPropertyBuilder{" +
-                "type='" + type + '\'' +
-                ", ref='" + ref + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-        }
-
-        public ModelPropertyBuilder type(final String type) {
-            this.type = type;
+        public ModelPropertyBuilder required(final Boolean required) {
+            this.required = required;
             return this;
         }
     }

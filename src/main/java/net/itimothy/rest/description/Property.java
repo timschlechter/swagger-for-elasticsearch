@@ -12,8 +12,9 @@ public class Property extends Description {
     private Boolean required;
     private Model model;
     private Boolean uniqueItems;
+    private Boolean isCollection;
 
-    public Property(String minVersion, String maxVersion, Object defaultValue, String description, List<String> enumValues, Long maximum, Long minimum, String name, Boolean required, Model model, Boolean uniqueItems) {
+    public Property(String minVersion, String maxVersion, Object defaultValue, String description, List<String> enumValues, Long maximum, Long minimum, String name, Boolean required, Model model, Boolean uniqueItems, Boolean isCollection) {
         super(minVersion, maxVersion);
         this.defaultValue = defaultValue;
         this.description = description;
@@ -24,14 +25,11 @@ public class Property extends Description {
         this.required = required;
         this.model = model;
         this.uniqueItems = uniqueItems;
+        this.isCollection = isCollection;
     }
 
     public static PropertyBuilder builder() {
         return new PropertyBuilder();
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof Property;
     }
 
     @Override
@@ -57,6 +55,8 @@ public class Property extends Description {
             return false;
         if (uniqueItems != null ? !uniqueItems.equals(property.uniqueItems) : property.uniqueItems != null)
             return false;
+        if (isCollection != null ? !isCollection.equals(property.isCollection) : property.isCollection != null)
+            return false;
 
         return true;
     }
@@ -72,6 +72,7 @@ public class Property extends Description {
         result = 31 * result + (required != null ? required.hashCode() : 0);
         result = 31 * result + (model != null ? model.hashCode() : 0);
         result = 31 * result + (uniqueItems != null ? uniqueItems.hashCode() : 0);
+        result = 31 * result + (isCollection != null ? isCollection.hashCode() : 0);
         return result;
     }
 
@@ -87,6 +88,7 @@ public class Property extends Description {
             ", required=" + required +
             ", model=" + model +
             ", uniqueItems=" + uniqueItems +
+            ", isCollection=" + isCollection +
             '}';
     }
 
@@ -162,6 +164,15 @@ public class Property extends Description {
         this.uniqueItems = uniqueItems;
     }
 
+    public Boolean getIsCollection() {
+        return this.isCollection;
+    }
+
+    public void setIsCollection(final Boolean collection) {
+        this.isCollection = collection;
+    }
+
+
     public static class PropertyBuilder {
 
         private String minVersion;
@@ -175,12 +186,13 @@ public class Property extends Description {
         private Boolean required;
         private Model model;
         private Boolean uniqueItems;
+        private Boolean isCollection;
 
         PropertyBuilder() {
         }
 
         public Property build() {
-            return new Property(minVersion, maxVersion, defaultValue, description, enumValues, maximum, minimum, name, required, model, uniqueItems);
+            return new Property(minVersion, maxVersion, defaultValue, description, enumValues, maximum, minimum, name, required, model, uniqueItems, isCollection);
         }
 
         public PropertyBuilder defaultValue(final Object defaultValue) {
@@ -233,6 +245,16 @@ public class Property extends Description {
             return this;
         }
 
+        public PropertyBuilder uniqueItems(final Boolean uniqueItems) {
+            this.uniqueItems = uniqueItems;
+            return this;
+        }
+
+        public PropertyBuilder isCollection(final Boolean isCollection) {
+            this.isCollection = isCollection;
+            return this;
+        }
+
         @Override
         public String toString() {
             return "PropertyBuilder{" +
@@ -247,12 +269,8 @@ public class Property extends Description {
                 ", required=" + required +
                 ", model=" + model +
                 ", uniqueItems=" + uniqueItems +
+                ", isCollection=" + isCollection +
                 '}';
-        }
-
-        public PropertyBuilder uniqueItems(final Boolean uniqueItems) {
-            this.uniqueItems = uniqueItems;
-            return this;
         }
     }
 }

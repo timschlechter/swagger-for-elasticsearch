@@ -80,10 +80,6 @@ public abstract class DataType extends SwaggerModel {
         this.uniqueItems = uniqueItems;
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof DataType;
-    }
-
     public Object getDefaultValue() {
         return this.defaultValue;
     }

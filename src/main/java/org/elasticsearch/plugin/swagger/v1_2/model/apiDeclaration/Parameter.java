@@ -34,7 +34,7 @@ public class Parameter extends DataType {
     private Boolean required;
 
     /**
-     * Another way to allow multiple values for a qury parameter. If used, the query parameter may
+     * Another way to allow isCollection values for a qury parameter. If used, the query parameter may
      * accept comma-separated values.
      */
     private Boolean allowMultiple;
@@ -146,7 +146,7 @@ public class Parameter extends DataType {
         private String ref;
         private String format;
         private Object defaultValue;
-        private List<String> _enum;
+        private List<String> enumValues;
         private Long minimum;
         private Long maximum;
         private Items items;
@@ -160,8 +160,8 @@ public class Parameter extends DataType {
         ParameterBuilder() {
         }
 
-        public ParameterBuilder _enum(final List<String> _enum) {
-            this._enum = _enum;
+        public ParameterBuilder enumValues(final List<String> _enum) {
+            this.enumValues = _enum;
             return this;
         }
 
@@ -171,7 +171,7 @@ public class Parameter extends DataType {
         }
 
         public Parameter build() {
-            return new Parameter(type, ref, format, defaultValue, _enum, minimum, maximum, items, uniqueItems, paramType, name, description, required, allowMultiple);
+            return new Parameter(type, ref, format, defaultValue, enumValues, minimum, maximum, items, uniqueItems, paramType, name, description, required, allowMultiple);
         }
 
         public ParameterBuilder defaultValue(final Object defaultValue) {
@@ -231,7 +231,7 @@ public class Parameter extends DataType {
                 ", ref='" + ref + '\'' +
                 ", format='" + format + '\'' +
                 ", defaultValue=" + defaultValue +
-                ", _enum=" + _enum +
+                ", enumValues=" + enumValues +
                 ", minimum=" + minimum +
                 ", maximum=" + maximum +
                 ", items=" + items +
