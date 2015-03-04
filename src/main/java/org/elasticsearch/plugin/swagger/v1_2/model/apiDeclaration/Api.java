@@ -12,7 +12,7 @@ public class Api extends SwaggerModel {
     private String path;
 
     /**
-     * A short description of the resource
+     * A short routes of the resource
      */
     private String description;
 
@@ -96,7 +96,7 @@ public class Api extends SwaggerModel {
     public String toString() {
         return "Api{" +
             "path='" + path + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             ", operations=" + operations +
             '}';
     }
@@ -133,7 +133,7 @@ public class Api extends SwaggerModel {
         public String toString() {
             return "ApiBuilder{" +
                 "path='" + path + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 ", operations=" + operations +
                 '}';
         }

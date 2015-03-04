@@ -91,7 +91,7 @@ public class Route extends Description {
             ", model=" + model +
             ", name='" + name + '\'' +
             ", parameters=" + parameters +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             ", notes='" + notes + '\'' +
             ", responses=" + responses +
             ", produces=" + produces +
@@ -290,7 +290,7 @@ public class Route extends Description {
                 ", model=" + model +
                 ", name='" + name + '\'' +
                 ", parameters=" + parameters +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 ", notes='" + notes + '\'' +
                 ", responses=" + responses +
                 ", produces=" + produces +

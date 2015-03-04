@@ -53,7 +53,7 @@ public class Model extends Description {
             "id='" + id + '\'' +
             ", properties=" + properties +
             ", name='" + name + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             '}';
     }
 
@@ -150,7 +150,7 @@ public class Model extends Description {
                 ", id='" + id + '\'' +
                 ", properties=" + properties +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 '}';
         }
     }

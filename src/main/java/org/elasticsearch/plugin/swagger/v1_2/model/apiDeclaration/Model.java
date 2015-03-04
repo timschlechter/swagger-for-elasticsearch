@@ -21,7 +21,7 @@ public class Model extends SwaggerModel {
     private Map<String, ModelProperty> properties;
 
     /**
-     * A brief description of this model.
+     * A brief routes of this model.
      */
     private String description;
 
@@ -168,7 +168,7 @@ public class Model extends SwaggerModel {
         return "Model{" +
             "id='" + id + '\'' +
             ", properties=" + properties +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             ", required=" + required +
             ", subTypes=" + subTypes +
             ", discriminator='" + discriminator + '\'' +
@@ -226,7 +226,7 @@ public class Model extends SwaggerModel {
             return "ModelBuilder{" +
                 "id='" + id + '\'' +
                 ", properties=" + properties +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 ", required=" + required +
                 ", subTypes=" + subTypes +
                 ", discriminator='" + discriminator + '\'' +

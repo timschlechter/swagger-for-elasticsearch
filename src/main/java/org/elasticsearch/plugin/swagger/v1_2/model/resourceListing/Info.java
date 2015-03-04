@@ -14,7 +14,7 @@ public class Info extends SwaggerModel {
     private String title;
 
     /**
-     * A short description of the application.
+     * A short routes of the application.
      */
     private String description;
 
@@ -46,7 +46,7 @@ public class Info extends SwaggerModel {
             throw new NullPointerException("title");
         }
         if (description == null) {
-            throw new NullPointerException("description");
+            throw new NullPointerException("routes");
         }
         this.title = title;
         this.description = description;
@@ -78,7 +78,7 @@ public class Info extends SwaggerModel {
 
     public void setDescription(final String description) {
         if (description == null) {
-            throw new NullPointerException("description");
+            throw new NullPointerException("routes");
         }
         this.description = description;
     }
@@ -153,7 +153,7 @@ public class Info extends SwaggerModel {
     public String toString() {
         return "Info{" +
             "title='" + title + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             ", termsOfServiceUrl='" + termsOfServiceUrl + '\'' +
             ", contact='" + contact + '\'' +
             ", license='" + license + '\'' +
@@ -211,7 +211,7 @@ public class Info extends SwaggerModel {
         public String toString() {
             return "InfoBuilder{" +
                 "title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 ", termsOfServiceUrl='" + termsOfServiceUrl + '\'' +
                 ", contact='" + contact + '\'' +
                 ", license='" + license + '\'' +

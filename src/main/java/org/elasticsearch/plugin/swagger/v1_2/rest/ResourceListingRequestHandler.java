@@ -3,7 +3,7 @@ package org.elasticsearch.plugin.swagger.v1_2.rest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.description.ElasticSearchMetadataProvider;
+import org.elasticsearch.routes.RoutesProvider;
 import org.elasticsearch.rest.RestController;
 import org.elasticsearch.rest.RestRequest;
 import org.elasticsearch.plugin.swagger.v1_2.SwaggerProvider;
@@ -22,7 +22,7 @@ public class ResourceListingRequestHandler extends RequestHandler {
 
     @Override
     protected SwaggerModel handleRequest(RestRequest request, Client client) throws Exception {
-        ElasticSearchMetadataProvider metadataProvider = getMetadataProvider(request, client);
+        RoutesProvider metadataProvider = getMetadataProvider(request, client);
         SwaggerProvider swaggerProvider = new SwaggerProvider(
             metadataProvider.getInfo(), 
             metadataProvider.getRoutes()

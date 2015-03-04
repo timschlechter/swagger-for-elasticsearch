@@ -15,7 +15,7 @@ public class Resource extends SwaggerModel {
     private String path;
 
     /**
-     * A short description of the resource.
+     * A short routes of the resource.
      */
     private String description;
 
@@ -82,7 +82,7 @@ public class Resource extends SwaggerModel {
     public String toString() {
         return "Resource{" +
             "path='" + path + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             '}';
     }
 
@@ -112,7 +112,7 @@ public class Resource extends SwaggerModel {
         public String toString() {
             return "ResourceBuilder{" +
                 "path='" + path + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 '}';
         }
     }

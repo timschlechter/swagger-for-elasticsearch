@@ -1,26 +1,24 @@
-package org.elasticsearch.description;
+package org.elasticsearch.routes.root;
 
 import net.itimothy.rest.description.HttpMethod;
 import net.itimothy.rest.description.ParamType;
 import net.itimothy.rest.description.Response;
 import net.itimothy.rest.description.Route;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.routes.ModelsCatalog;
+import org.elasticsearch.routes.RoutesProvider;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
-class IndexApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public IndexApiMetadataProvider(ModelsCatalog modelsCatalog, Client client, String indexOrAlias) {
-        super("Index APIs", client, modelsCatalog, indexOrAlias);
+class IndexRoutes extends RoutesProvider {
+    public IndexRoutes(ModelsCatalog modelsCatalog, Client client) {
+        super("Index APIs", client, modelsCatalog);
     }
 
     @Override
     public List<Route> getRoutesInternal() {
-        if (getIndexOrAlias() != null) {
-            return asList();
-        }
-
         return asList(
             Route.builder()
                 .method(HttpMethod.GET)

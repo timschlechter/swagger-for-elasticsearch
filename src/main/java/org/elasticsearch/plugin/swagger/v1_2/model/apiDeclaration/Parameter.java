@@ -23,7 +23,7 @@ public class Parameter extends DataType {
     private String name;
 
     /**
-     * A brief description of this parameter.
+     * A brief routes of this parameter.
      */
     private String description;
 
@@ -134,7 +134,7 @@ public class Parameter extends DataType {
         return "Parameter{" +
             "paramType=" + paramType +
             ", name='" + name + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             ", required=" + required +
             ", allowMultiple=" + allowMultiple +
             '}';
@@ -238,7 +238,7 @@ public class Parameter extends DataType {
                 ", uniqueItems=" + uniqueItems +
                 ", paramType=" + paramType +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 ", required=" + required +
                 ", allowMultiple=" + allowMultiple +
                 '}';

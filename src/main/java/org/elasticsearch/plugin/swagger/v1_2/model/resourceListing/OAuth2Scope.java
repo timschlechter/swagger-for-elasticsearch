@@ -13,7 +13,7 @@ public class OAuth2Scope extends SwaggerModel {
     private String scope;
 
     /**
-     * A short description of the scope.
+     * A short routes of the scope.
      */
     private String description;
 
@@ -80,7 +80,7 @@ public class OAuth2Scope extends SwaggerModel {
     public String toString() {
         return "OAuth2Scope{" +
             "scope='" + scope + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             '}';
     }
 
@@ -111,7 +111,7 @@ public class OAuth2Scope extends SwaggerModel {
         public String toString() {
             return "OAuth2ScopeBuilder{" +
                 "scope='" + scope + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 '}';
         }
     }

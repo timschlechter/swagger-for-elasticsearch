@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Resource Listing serves as the root document for the API description. It contains general
+ * The Resource Listing serves as the root document for the API routes. It contains general
  * information about the API and an inventory of the available resources.
  */
 public class ResourceListing extends SwaggerModel {

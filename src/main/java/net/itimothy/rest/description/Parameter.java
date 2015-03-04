@@ -72,7 +72,7 @@ public class Parameter extends Description {
             "allowMultiple=" + allowMultiple +
             ", paramType=" + paramType +
             ", name='" + name + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             ", required=" + required +
             ", defaultValue=" + defaultValue +
             ", model=" + model +
@@ -225,7 +225,7 @@ public class Parameter extends Description {
                 ", maxVersion='" + maxVersion + '\'' +
                 ", paramType=" + paramType +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 ", required=" + required +
                 ", defaultValue=" + defaultValue +
                 ", model=" + model +

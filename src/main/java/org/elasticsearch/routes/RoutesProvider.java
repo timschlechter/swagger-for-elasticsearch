@@ -1,4 +1,4 @@
-package org.elasticsearch.description;
+package org.elasticsearch.routes;
 
 import net.itimothy.rest.description.*;
 import org.elasticsearch.client.Client;
@@ -11,22 +11,17 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
-public abstract class ElasticSearchMetadataProvider {
+public abstract class RoutesProvider {
 
     private final Client client;
-    private final String indexOrAlias;
     private final ModelsCatalog modelsCatalog;
     private final String defaultGroup;
+    private Map<String, Object> cache = new HashMap<>();
 
-    protected ElasticSearchMetadataProvider(String defaultGroup, Client client, ModelsCatalog modelsCatalog, String indexOrAlias) {
+    protected RoutesProvider(String defaultGroup, Client client, ModelsCatalog modelsCatalog) {
         this.modelsCatalog = modelsCatalog;
         this.defaultGroup = defaultGroup;
         this.client = client;
-        this.indexOrAlias = indexOrAlias;
-    }
-
-    protected String getIndexOrAlias() {
-        return indexOrAlias;
     }
 
     protected ModelsCatalog getModelsCatalog() {
@@ -42,23 +37,20 @@ public abstract class ElasticSearchMetadataProvider {
             }
         }
 
-        // TODO: modify the result to remove every Description object which does not matches 
+        // TODO: modify the result to remove every Description object which does not matches
         //       the current node's version of Elasticsearch
 
         return result;
     }
 
-    public abstract List<Route> getRoutesInternal();
+    protected abstract List<Route> getRoutesInternal();
 
     public Info getInfo() {
         DiscoveryNode currentNode = getCurrentNode();
 
         return Info.builder()
             .version(currentNode.getVersion().number())
-            .title(
-                "Elasticsearch " + currentNode.getVersion().number() + " API" +
-                    (indexOrAlias != null ? " for index/alias " + indexOrAlias : "")
-            )
+            .title("Elasticsearch " + currentNode.getVersion().number() + " API")
             .description(
                 String.format("Hostname: %s\n\nNode: %s",
                     currentNode.getHostName(),
@@ -66,10 +58,6 @@ public abstract class ElasticSearchMetadataProvider {
                 )
             )
             .build();
-    }
-
-    protected String indexOrAliasPrepended(String apiPath) {
-        return getIndexOrAlias() != null ? getIndexOrAlias() + "/" + apiPath : apiPath;
     }
 
     public Parameter.ParameterBuilder param(String name, ParamType paramType) {
@@ -139,15 +127,14 @@ public abstract class ElasticSearchMetadataProvider {
         ).allowMultiple(true);
     }
 
-    private Map<String, Object> cache = new HashMap<>();
     protected <T> T getOrResolve(String cacheKey, Supplier<T> resolveFn) {
         if (!cache.containsKey(cacheKey)) {
             cache.put(cacheKey, resolveFn.get());
         }
-        
-        return (T)cache.get(cacheKey);
+
+        return (T) cache.get(cacheKey);
     }
-    
+
     protected List<String> getAllIndices() {
         return getOrResolve("getAllIndices", () -> {
             List<String> allIndices = new ArrayList<>();
@@ -195,7 +182,7 @@ public abstract class ElasticSearchMetadataProvider {
 
         return result;
     }
-    
+
     protected List<Parameter> defaultUriSearchParams() {
         return asList(
             queryParam("q")

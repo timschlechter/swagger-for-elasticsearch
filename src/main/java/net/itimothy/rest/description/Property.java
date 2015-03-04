@@ -80,7 +80,7 @@ public class Property extends Description {
     public String toString() {
         return "Property{" +
             "defaultValue=" + defaultValue +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             ", enumValues=" + enumValues +
             ", maximum=" + maximum +
             ", minimum=" + minimum +
@@ -261,7 +261,7 @@ public class Property extends Description {
                 "minVersion='" + minVersion + '\'' +
                 ", maxVersion='" + maxVersion + '\'' +
                 ", defaultValue=" + defaultValue +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 ", enumValues=" + enumValues +
                 ", maximum=" + maximum +
                 ", minimum=" + minimum +

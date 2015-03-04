@@ -2,8 +2,8 @@ package org.elasticsearch.plugin.swagger.v1_2.rest;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.description.MainApiMetadataProvider;
-import org.elasticsearch.description.ElasticSearchMetadataProvider;
+import org.elasticsearch.routes.ElasticsearchRoutesProvider;
+import org.elasticsearch.routes.RoutesProvider;
 import org.elasticsearch.rest.*;
 import org.elasticsearch.plugin.swagger.v1_2.model.SwaggerModel;
 
@@ -33,7 +33,7 @@ public abstract class RequestHandler extends BaseRestHandler {
         }
     }
     
-    protected ElasticSearchMetadataProvider getMetadataProvider(RestRequest request, Client client) {
-        return new MainApiMetadataProvider(client, request.param("indexOrAlias"));
+    protected RoutesProvider getMetadataProvider(RestRequest request, Client client) {
+        return new ElasticsearchRoutesProvider(client, request.param("indexOrAlias"));
     }
 }

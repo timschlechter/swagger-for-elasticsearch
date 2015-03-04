@@ -1,9 +1,10 @@
-package org.elasticsearch.description;
+package org.elasticsearch.routes.index;
 
 import net.itimothy.rest.description.HttpMethod;
 import net.itimothy.rest.description.ParamType;
 import net.itimothy.rest.description.Route;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.routes.ModelsCatalog;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,17 +13,13 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
-public class DocumentApiMetadataProvider extends ElasticSearchMetadataProvider {
-    public DocumentApiMetadataProvider(ModelsCatalog modelsCatalog, Client client, String indexOrAlias) {
+class DocumentRoutes extends BaseIndexRoutes {
+    public DocumentRoutes(Client client, ModelsCatalog modelsCatalog, String indexOrAlias) {
         super("Document APIs", client, modelsCatalog, indexOrAlias);
     }
 
     @Override
     public List<Route> getRoutesInternal() {
-        if (getIndexOrAlias() == null) {
-            return asList();
-        }
-
         List<Route> result = new ArrayList<>();
 
         result.addAll(asList(

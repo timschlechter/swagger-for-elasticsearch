@@ -16,7 +16,7 @@ public class ModelProperty extends DataType {
     private String name;
 
     /**
-     * A brief description of this property.
+     * A brief routes of this property.
      */
     private String description;
 
@@ -76,7 +76,7 @@ public class ModelProperty extends DataType {
     public String toString() {
         return "ModelProperty{" +
             "name='" + name + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             '}';
     }
 

@@ -3,12 +3,12 @@ package net.itimothy.rest.description;
 public abstract class Description {
 
     /**
-     * The first version in which this description became applicable
+     * The first version in which this routes became applicable
      */
     private String minVersion;
 
     /**
-     * The last version in which this description was applicable
+     * The last version in which this routes was applicable
      */
     private String maxVersion;
 

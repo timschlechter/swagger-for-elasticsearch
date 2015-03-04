@@ -44,7 +44,7 @@ public class Info extends Description {
         return "Info{" +
             "version='" + version + '\'' +
             ", title='" + title + '\'' +
-            ", description='" + description + '\'' +
+            ", routes='" + description + '\'' +
             '}';
     }
 
@@ -113,7 +113,7 @@ public class Info extends Description {
                 ", maxVersion='" + maxVersion + '\'' +
                 ", version='" + version + '\'' +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", routes='" + description + '\'' +
                 '}';
         }
 
