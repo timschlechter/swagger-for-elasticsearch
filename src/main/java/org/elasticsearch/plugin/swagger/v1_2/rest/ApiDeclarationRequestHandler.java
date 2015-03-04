@@ -3,11 +3,11 @@ package org.elasticsearch.plugin.swagger.v1_2.rest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.routes.RoutesProvider;
-import org.elasticsearch.rest.RestController;
-import org.elasticsearch.rest.RestRequest;
 import org.elasticsearch.plugin.swagger.v1_2.SwaggerProvider;
 import org.elasticsearch.plugin.swagger.v1_2.model.SwaggerModel;
+import org.elasticsearch.rest.RestController;
+import org.elasticsearch.rest.RestRequest;
+import org.elasticsearch.routes.RoutesProvider;
 
 import static org.elasticsearch.plugin.swagger.SwaggerPlugin.API_DOCS_PATH;
 import static org.elasticsearch.rest.RestRequest.Method.GET;

@@ -4,10 +4,12 @@ import net.itimothy.rest.description.*;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.common.lang3.StringUtils;
+import org.elasticsearch.routes.util.SimpleCache;
 
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import static java.util.Arrays.asList;
 
@@ -16,12 +18,16 @@ public abstract class RoutesProvider {
     private final Client client;
     private final ModelsCatalog modelsCatalog;
     private final String defaultGroup;
-    private Map<String, Object> cache = new HashMap<>();
+    private SimpleCache cache = new SimpleCache();
 
     protected RoutesProvider(String defaultGroup, Client client, ModelsCatalog modelsCatalog) {
         this.modelsCatalog = modelsCatalog;
         this.defaultGroup = defaultGroup;
         this.client = client;
+    }
+
+    protected Client getClient() {
+        return client;
     }
 
     protected ModelsCatalog getModelsCatalog() {
@@ -117,70 +123,86 @@ public abstract class RoutesProvider {
     }
 
     public Parameter.ParameterBuilder typeSelectParam(String name, ParamType paramType) {
-        return enumParam(
-            name,
-            paramType,
-            modelsCatalog.getTypeModels().stream()
-                .map(m -> m.getName())
-                .distinct()
-                .collect(Collectors.toList())
-        ).allowMultiple(true);
-    }
-
-    protected <T> T getOrResolve(String cacheKey, Supplier<T> resolveFn) {
-        if (!cache.containsKey(cacheKey)) {
-            cache.put(cacheKey, resolveFn.get());
+        List<String> typeModelNames = new ArrayList<>();
+        for (Model typeModel : modelsCatalog.getTypeModels()) {
+            if (!typeModelNames.contains(typeModel.getName())) {
+                typeModelNames.add(typeModel.getName());
+            }
         }
 
-        return (T) cache.get(cacheKey);
+        return enumParam(name, paramType, typeModelNames)
+            .allowMultiple(true);
     }
 
     protected List<String> getAllIndices() {
-        return getOrResolve("getAllIndices", () -> {
-            List<String> allIndices = new ArrayList<>();
+        return cache.getOrResolve("getAllIndices",
+            new Callable<List<String>>() {
+                @Override
+                public List<String> call() throws Exception {
+                    List<String> allIndices = new ArrayList<String>();
 
-            allIndices.add("*");
-            allIndices.addAll(
-                asList(client.admin().indices()
-                        .prepareGetIndex()
-                        .get()
-                        .getIndices()
-                )
-            );
+                    allIndices.add("*");
+                    allIndices.addAll(
+                        asList(client.admin().indices()
+                                .prepareGetIndex()
+                                .get()
+                                .getIndices()
+                        )
+                    );
 
-            allIndices.sort(Comparator.naturalOrder());
+                    Collections.sort(allIndices);
 
-            return allIndices;
-        });
+                    return allIndices;
+                }
+            }
+        );
     }
 
     protected List<String> getAllAliases() {
-        return getOrResolve("getAllAliases", () -> {
-            List<String> allAliases = asList(
-                client.admin().indices()
-                    .prepareGetAliases()
-                    .get()
-                    .getAliases()
-                    .keys()
-                    .toArray(String.class)
-            );
+        return cache.getOrResolve("getAllAliases",
+            new Callable<List<String>>() {
+                @Override
+                public List<String> call() throws Exception {
+                    List<String> allAliases = asList(
+                        client.admin().indices()
+                            .prepareGetAliases()
+                            .get()
+                            .getAliases()
+                            .keys()
+                            .toArray(String.class)
+                    );
 
-            return allAliases;
-        });
+                    return allAliases;
+                }
+            }
+        );
     }
 
     protected DiscoveryNode getCurrentNode() {
-        return getOrResolve("getCurrentNode", () -> client.admin().cluster().prepareNodesInfo().get().getNodes()[0].getNode());
+        return cache.getOrResolve("getCurrentNode",
+            new Callable<DiscoveryNode>() {
+                @Override
+                public DiscoveryNode call() throws Exception {
+                    return client.admin().cluster().prepareNodesInfo().get().getNodes()[0].getNode();
+                }
+            }
+        );
     }
 
     protected List<String> getAllIndicesAndAliases() {
-        List<String> result = new ArrayList<>();
+        return cache.getOrResolve("getAllIndicesAndAliases",
+            new Callable<List<String>>() {
+                @Override
+                public List<String> call() throws Exception {
+                    List<String> result = new ArrayList<>();
 
-        result.addAll(getAllIndices());
-        result.addAll(getAllAliases());
-        result.sort(Comparator.comparing(s -> s));
+                    result.addAll(getAllIndices());
+                    result.addAll(getAllAliases());
+                    Collections.sort(result);
 
-        return result;
+                    return result;
+                }
+            });
     }
 
     protected List<Parameter> defaultUriSearchParams() {

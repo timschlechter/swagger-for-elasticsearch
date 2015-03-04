@@ -10,7 +10,7 @@ __Note:__ This plugin does not aim to be the ultimate management tool for Elasti
 * Automatically adapts to the version of your Elasticsearch installation
 * Includes a slightly modified version of [Swagger UI](https://github.com/swagger-api/swagger-ui) to make it easy to switch index/alias API's
 * Dynamic generation of the documentation, just install the plugin and go!
- 
+* Supports Java 7 and 8, no support for Java 6
 
 Development
 -----------

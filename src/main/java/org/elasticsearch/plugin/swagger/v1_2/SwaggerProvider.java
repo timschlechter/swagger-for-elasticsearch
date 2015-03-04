@@ -5,8 +5,8 @@ import net.itimothy.rest.description.Route;
 import org.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.ApiDeclaration;
 import org.elasticsearch.plugin.swagger.v1_2.model.resourceListing.ResourceListing;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SwaggerProvider {
 
@@ -24,9 +24,12 @@ public class SwaggerProvider {
     }
 
     public ApiDeclaration getApiDeclaration(String resource) {
-        List<Route> routes = this.routes.stream()
-            .filter(r -> r.getGroup().equals(resource))
-            .collect(Collectors.toList());
+        List<Route> routes = new ArrayList<>();
+        for (Route route : this.routes) {
+            if (route.getGroup().equals(resource)) {
+                routes.add(route);
+            }
+        }
 
         return ApiDeclaration.builder()
             .swaggerVersion("1.2")

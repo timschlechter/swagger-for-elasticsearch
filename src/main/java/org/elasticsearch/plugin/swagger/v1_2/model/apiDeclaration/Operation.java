@@ -25,7 +25,7 @@ public class Operation extends DataType {
     /**
      * The inputs to the operation.
      */
-    private List<Parameter> parameters = new ArrayList<>();
+    private List<Parameter> parameters = new ArrayList<Parameter>();
 
     /**
      * A short summary of what the operation does.
@@ -40,24 +40,24 @@ public class Operation extends DataType {
     /**
      * A list of authorizations required to execute this operation.
      */
-    private List<Authorization> authorizations = new ArrayList<>();
+    private List<Authorization> authorizations = new ArrayList<Authorization>();
 
     /**
      * Lists the possible response statuses that can return from the operation.
      */
-    private List<ResponseMessage> responseMessages = new ArrayList<>();
+    private List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
 
     /**
      * A list of MIME types this operation can produce. This is overrides the global produces
      * definition at the root of the API Declaration.
      */
-    private List<String> produces = new ArrayList<>();
+    private List<String> produces = new ArrayList<String>();
 
     /**
      * A list of MIME types this operation can consume. This is overrides the global consumes
      * definition at the root of the API Declaration.
      */
-    private List<String> consumes = new ArrayList<>();
+    private List<String> consumes = new ArrayList<String>();
 
     /**
      * Declares this operation to be deprecated. Usage of the declared operation should be

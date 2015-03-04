@@ -8,13 +8,14 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.hppc.cursors.ObjectCursor;
+import org.elasticsearch.routes.util.SimpleCache;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.concurrent.Callable;
 
 import static java.util.Arrays.asList;
 
@@ -88,13 +89,9 @@ public class ModelsCatalog {
                 .model(FEATURES).build()
         )).build();
     public static final Model OBJECT = Model.builder()
-        .id("object")
-        .properties(asList(
-        )).build();
+        .id("object").build();
     public static final Model FILTER = Model.builder()
-        .id("filter")
-        .properties(asList(
-        )).build();
+        .id("filter").build();
     public static final Model ALIAS = Model.builder()
         .id("alias")
         .properties(asList(
@@ -203,6 +200,7 @@ public class ModelsCatalog {
     Map<String, List<Model>> indexTypeModelsMap;
     Map<String, List<Model>> indexDocumentModelsMap;
     Map<String, List<Model>> indexDocumentSearchResultModelsMap;
+    private SimpleCache cache = new SimpleCache();
     private String indexOrAlias;
 
 
@@ -244,220 +242,254 @@ public class ModelsCatalog {
         return getDocumentModelId(index, typeName) + "SearchResult";
     }
 
-    public Map<String, List<Model>> getIndexTypeModelsMap() {
-        if (indexTypeModelsMap == null) {
-            indexTypeModelsMap = new HashMap<>();
+    public IndexModelsMap getIndexTypeModelsMap() {
+        return cache.getOrResolve("getIndexTypeModelsMap",
+            new Callable<IndexModelsMap>() {
+                @Override
+                public IndexModelsMap call() throws Exception {
+                    IndexModelsMap result = new IndexModelsMap();
 
-            GetMappingsResponse getMappingsResponse = client.admin().indices().prepareGetMappings().get();
+                    GetMappingsResponse getMappingsResponse = client.admin().indices().prepareGetMappings().get();
 
-            ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> indexTypeMappings = getMappingsResponse.getMappings();
-            for (ObjectCursor<String> indexCursor : indexTypeMappings.keys()) {
-                String indexName = indexCursor.value;
-                List<Model> typeModels = new ArrayList<>();
-                indexTypeModelsMap.put(indexName, typeModels);
+                    ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> indexTypeMappings = getMappingsResponse.getMappings();
+                    for (ObjectCursor<String> indexCursor : indexTypeMappings.keys()) {
+                        String indexName = indexCursor.value;
+                        List<Model> typeModels = new ArrayList<>();
+                        result.put(indexName, typeModels);
 
-                ImmutableOpenMap<String, MappingMetaData> typeMappings = indexTypeMappings.get(indexName);
-                for (ObjectCursor<String> typeCursor : typeMappings.keys()) {
-                    String typeName = typeCursor.value;
+                        ImmutableOpenMap<String, MappingMetaData> typeMappings = indexTypeMappings.get(indexName);
+                        for (ObjectCursor<String> typeCursor : typeMappings.keys()) {
+                            String typeName = typeCursor.value;
 
-                    Map mappingProperties = null;
-                    try {
-                        mappingProperties = (Map) typeMappings.get(typeCursor.value).getSourceAsMap().get("properties");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                            Map mappingProperties = null;
+                            try {
+                                mappingProperties = (Map) typeMappings.get(typeCursor.value).getSourceAsMap().get("properties");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
 
-                    List<Property> properties = new ArrayList<>();
-                    for (Object propertyNameObj : mappingProperties.keySet()) {
-                        String propertyName = propertyNameObj.toString();
-                        if (mappingProperties.containsKey(propertyName)) {
-                            Map fieldMapping = (Map) mappingProperties.get(propertyName);
-                            String mappingType = fieldMapping.containsKey("type") ? fieldMapping.get("type").toString() : "string";
-                            properties.add(
-                                Property.builder()
-                                    .name(propertyName.toString())
-                                    .model(mappingType != null ? mappingTypeToModel(mappingType) : null).build()
+                            List<Property> properties = new ArrayList<>();
+                            for (Object propertyNameObj : mappingProperties.keySet()) {
+                                String propertyName = propertyNameObj.toString();
+                                if (mappingProperties.containsKey(propertyName)) {
+                                    Map fieldMapping = (Map) mappingProperties.get(propertyName);
+                                    String mappingType = fieldMapping.containsKey("type") ? fieldMapping.get("type").toString() : "string";
+                                    properties.add(
+                                        Property.builder()
+                                            .name(propertyName.toString())
+                                            .model(mappingType != null ? mappingTypeToModel(mappingType) : null).build()
+                                    );
+                                }
+                            }
+
+                            typeModels.add(
+                                Model.builder()
+                                    .id(getTypeModelId(indexName, typeName))
+                                    .name(typeName)
+                                    .properties(properties)
+                                    .build()
                             );
                         }
                     }
-
-                    typeModels.add(
-                        Model.builder()
-                            .id(getTypeModelId(indexName, typeName))
-                            .name(typeName)
-                            .properties(properties)
-                            .build()
-                    );
+                    return result;
                 }
             }
-        }
-
-        return indexTypeModelsMap;
+        );
     }
 
-    public Map<String, List<Model>> getIndexDocumentModelsMap() {
-        if (indexDocumentModelsMap == null) {
-            indexDocumentModelsMap = getIndexTypeModelsMap().entrySet().stream()
-                .collect(
-                    Collectors.toMap(
-                        e -> e.getKey(),
-                        e -> {
-                            String indexName = e.getKey();
-                            List<Model> typeModels = e.getValue();
+    public IndexModelsMap getIndexDocumentModelsMap() {
+        return cache.getOrResolve("getIndexDocumentModelsMap",
+            new Callable<IndexModelsMap>() {
+                @Override
+                public IndexModelsMap call() throws Exception {
+                    IndexModelsMap result = new IndexModelsMap();
 
-                            return typeModels.stream()
-                                .map(m -> Model.builder()
-                                        .id(getDocumentModelId(indexName, m.getName()))
-                                        .properties(asList(
-                                            Property.builder()
-                                                .name("_index")
-                                                .description("Index which this document is in")
-                                                .required(true)
-                                                .model(Primitive.STRING).build(),
-                                            Property.builder()
-                                                .name("_type")
-                                                .description("Type of this document")
-                                                .required(true)
-                                                .model(Primitive.STRING).build(),
-                                            Property.builder()
-                                                .name("_id")
-                                                .description("Unique identifier of this document within its index and type")
-                                                .required(true)
-                                                .model(Primitive.STRING).build(),
-                                            Property.builder()
-                                                .name("_version")
-                                                .description("Version of the document")
-                                                .required(true)
-                                                .model(Primitive.LONG).build(),
-                                            Property.builder()
-                                                .name("_found")
-                                                .description("Returns whether the document was found or not")
-                                                .required(true)
-                                                .model(Primitive.BOOLEAN).build(),
-                                            Property.builder()
-                                                .name("_source")
-                                                .required(false)
-                                                .description("Contains the actual document when found")
-                                                .model(m).build()
-                                        )).build()
-                                ).collect(Collectors.toList());
+                    for (Map.Entry<String, List<Model>> entry : getIndexTypeModelsMap().entrySet()) {
+                        String indexName = entry.getKey();
+                        List<Model> typeModels = entry.getValue();
+                        List<Model> documentModels = new ArrayList<>();
+
+                        for (Model typeModel : typeModels) {
+                            documentModels.add(typeModelToDocumentModel(indexName, typeModel));
                         }
-                    )
-                );
-        }
 
-        return indexDocumentModelsMap;
+                        result.put(indexName, documentModels);
+                    }
+
+                    return result;
+                }
+            }
+        );
     }
 
-    public Map<String, List<Model>> getIndexDocumentSearchResultModelsMap() {
-        if (indexDocumentSearchResultModelsMap == null) {
-            indexDocumentSearchResultModelsMap = getIndexTypeModelsMap().entrySet().stream()
-                .collect(
-                    Collectors.toMap(
-                        e -> e.getKey(),
-                        e -> {
-                            String indexName = e.getKey();
-                            List<Model> typeModels = e.getValue();
+    public IndexModelsMap getIndexDocumentSearchResultModelsMap() {
+        return cache.getOrResolve("getIndexDocumentSearchResultModelsMap",
+            new Callable<IndexModelsMap>() {
+                @Override
+                public IndexModelsMap call() throws Exception {
+                    IndexModelsMap result = new IndexModelsMap();
 
-                            return typeModels.stream()
-                                .map(m ->
-                                        Model.builder()
-                                            .id(getDocumentSearchResultModelId(indexName, m.getName()))
-                                            .properties(
-                                                Property.builder()
-                                                    .name("shards")
-                                                    .required(true)
-                                                    .model(SHARD_INFO).build(),
-                                                Property.builder()
-                                                    .name("hits")
-                                                    .required(true)
-                                                    .model(
-                                                        Model.builder()
-                                                            .id("hits")
-                                                            .properties(
-                                                                Property.builder()
-                                                                    .name("total")
-                                                                    .required(true)
-                                                                    .model(Primitive.INTEGER).build(),
-                                                                Property.builder()
-                                                                    .name("hits")
-                                                                    .required(true)
-                                                                    .model(getDocumentModel(m))
-                                                                    .isCollection(true).build()
-                                                            ).build()
-                                                    ).build()
-                                            ).build()
-                                ).collect(Collectors.toList());
+                    for (Map.Entry<String, List<Model>> entry : getIndexTypeModelsMap().entrySet()) {
+                        String indexName = entry.getKey();
+                        List<Model> typeModels = entry.getValue();
+                        List<Model> documentModels = new ArrayList<>();
+
+                        for (Model typeModel : typeModels) {
+                            documentModels.add(typeModelToDocumentSearchResultModel(indexName, typeModel));
                         }
-                    )
-                );
-        }
 
-        return indexDocumentSearchResultModelsMap;
+                        result.put(indexName, documentModels);
+                    }
+
+                    return result;
+                }
+            }
+        );
+    }
+
+    public List<Model> getIndexTypeModels(String indexName) {
+        return getIndexTypeModelsMap().get(indexName);
     }
 
     public List<Model> getTypeModels() {
-        return getIndexTypeModelsMap().values().stream()
-            .flatMap(m -> m.stream())
-            .collect(Collectors.toList());
+        return getIndexTypeModelsMap().getAllModels();
     }
 
     public List<Model> getDocumentModels() {
-        return getIndexDocumentModelsMap().values().stream()
-            .flatMap(m -> m.stream())
-            .collect(Collectors.toList());
+        return getIndexDocumentModelsMap().getAllModels();
     }
 
     public Model getTypeModel(String index, String typeName) {
-        if (getIndexTypeModelsMap().containsKey(index)) {
-            return getIndexTypeModelsMap().get(index).stream()
-                .filter(m -> m.getId().equals(getTypeModelId(index, typeName)))
-                .findFirst()
-                .orElse(null);
-        }
-
-        return null;
+        return getIndexTypeModelsMap().getModel(getTypeModelId(index, typeName));
     }
 
     public Model getDocumentModel(String index, String typeName) {
-        if (getIndexDocumentModelsMap().containsKey(index)) {
-            return getIndexDocumentModelsMap().get(index).stream()
-                .filter(m -> m.getId().equals(getDocumentModelId(index, typeName)))
-                .findFirst()
-                .orElse(null);
-        }
-
-        return null;
+        return getIndexDocumentModelsMap().getModel(getDocumentModelId(index, typeName));
     }
 
     public Model getDocumentModel(Model typeModel) {
-        String indexName = getIndexTypeModelsMap().entrySet().stream()
-            .filter(e -> e.getValue().contains(typeModel))
-            .map(e -> e.getKey())
-            .findFirst()
-            .orElse(null);
-
-        return getDocumentModel(indexName, typeModel.getName());
+        return getDocumentModel(
+            getIndexTypeModelsMap().getIndexName(typeModel),
+            typeModel.getName()
+        );
     }
 
     public Model getDocumentSearchResultModel(String index, String typeName) {
-        if (getIndexDocumentSearchResultModelsMap().containsKey(index)) {
-            return getIndexDocumentSearchResultModelsMap().get(index).stream()
-                .filter(m -> m.getId().equals(getDocumentSearchResultModelId(index, typeName)))
-                .findFirst()
-                .orElse(null);
-        }
-
-        return null;
+        return getIndexDocumentSearchResultModelsMap().getModel(getDocumentSearchResultModelId(index, typeName));
     }
 
     public Model getDocumentSearchResultModel(Model typeModel) {
-        String indexName = getIndexTypeModelsMap().entrySet().stream()
-            .filter(e -> e.getValue().contains(typeModel))
-            .map(e -> e.getKey())
-            .findFirst()
-            .orElse(null);
+        return getDocumentSearchResultModel(
+            getIndexTypeModelsMap().getIndexName(typeModel),
+            typeModel.getName()
+        );
+    }
 
-        return getDocumentSearchResultModel(indexName, typeModel.getName());
+    /**
+     * Creates a document representation of the given Type model
+     *
+     * @param indexName Name of the index the type is in
+     * @param typeModel Type's model representation
+     * @return a Document representation of the given Type model
+     */
+    protected Model typeModelToDocumentModel(String indexName, Model typeModel) {
+        return Model.builder()
+            .id(getDocumentModelId(indexName, typeModel.getName()))
+            .properties(asList(
+                Property.builder()
+                    .name("_index")
+                    .description("Index which this document is in")
+                    .required(true)
+                    .model(Primitive.STRING).build(),
+                Property.builder()
+                    .name("_type")
+                    .description("Type of this document")
+                    .required(true)
+                    .model(Primitive.STRING).build(),
+                Property.builder()
+                    .name("_id")
+                    .description("Unique identifier of this document within its index and type")
+                    .required(true)
+                    .model(Primitive.STRING).build(),
+                Property.builder()
+                    .name("_version")
+                    .description("Version of the document")
+                    .required(true)
+                    .model(Primitive.LONG).build(),
+                Property.builder()
+                    .name("_found")
+                    .description("Returns whether the document was found or not")
+                    .required(true)
+                    .model(Primitive.BOOLEAN).build(),
+                Property.builder()
+                    .name("_source")
+                    .required(false)
+                    .description("Contains the actual document when found")
+                    .model(typeModel).build()
+            )).build();
+    }
+
+    /**
+     * Creates a document search result representation of the given Type model
+     *
+     * @param indexName Name of the index the type is in
+     * @param typeModel Type's model representation
+     * @return a Document Search Result representation of the given Type model
+     */
+    protected Model typeModelToDocumentSearchResultModel(String indexName, Model typeModel) {
+        return Model.builder()
+            .id(getDocumentSearchResultModelId(indexName, typeModel.getName()))
+            .properties(
+                Property.builder()
+                    .name("shards")
+                    .required(true)
+                    .model(SHARD_INFO).build(),
+                Property.builder()
+                    .name("hits")
+                    .required(true)
+                    .model(
+                        Model.builder()
+                            .id("hits")
+                            .properties(
+                                Property.builder()
+                                    .name("total")
+                                    .required(true)
+                                    .model(Primitive.INTEGER).build(),
+                                Property.builder()
+                                    .name("hits")
+                                    .required(true)
+                                    .model(getDocumentModel(typeModel))
+                                    .isCollection(true).build()
+                            ).build()
+                    ).build()
+            ).build();
+    }
+
+    private class IndexModelsMap extends HashMap<String, List<Model>> {
+        public List<Model> getAllModels() {
+            List<Model> result = new ArrayList<>();
+            for (List<Model> models : values()) {
+                result.addAll(models);
+            }
+            return result;
+        }
+
+        public Model getModel(String id) {
+            for (Model model : getAllModels()) {
+                if (model.getId().equals(id)) {
+                    return model;
+                }
+            }
+            return null;
+        }
+
+        public String getIndexName(Model model) {
+            for (Map.Entry<String, List<Model>> entry : this.entrySet()) {
+                if (entry.getValue().contains(model)) {
+                    return entry.getKey();
+                }
+            }
+            return null;
+        }
     }
 }

@@ -1,15 +1,16 @@
 package org.elasticsearch.routes.index;
 
 import net.itimothy.rest.description.HttpMethod;
+import net.itimothy.rest.description.Model;
 import net.itimothy.rest.description.ParamType;
 import net.itimothy.rest.description.Route;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.base.Function;
 import org.elasticsearch.routes.ModelsCatalog;
+import org.elasticsearch.routes.util.CollectionUtil;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
@@ -32,10 +33,21 @@ class DocumentRoutes extends BaseIndexRoutes {
                 ).build()
         ));
 
-        result.addAll(
-            getModelsCatalog().getIndexTypeModelsMap().get(getIndexOrAlias()).stream()
-                .sorted(Comparator.comparing(m -> m.getName()))
-                .map(model -> asList(
+        List<Model> typeModels = getModelsCatalog().getIndexTypeModels(getIndexOrAlias());
+
+        CollectionUtil.sort(
+            typeModels,
+            new Function<Model, Comparable>() {
+                @Override
+                public Comparable apply(Model model) {
+                    return model.getName();
+                }
+            }
+        );
+
+        for (Model model : typeModels) {
+            result.addAll(
+                asList(
                     Route.builder()
                         .group("- " + model.getName())
                         .method(HttpMethod.POST)
@@ -112,10 +124,9 @@ class DocumentRoutes extends BaseIndexRoutes {
                         )
                         .parameters(defaultUriSearchParams())
                         .model(getModelsCatalog().getDocumentSearchResultModel(model)).build()
-                ))
-                .flatMap(r -> r.stream())
-                .collect(Collectors.toList())
-        );
+                )
+            );
+        }
 
         return result;
     }

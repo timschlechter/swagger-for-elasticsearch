@@ -2,10 +2,10 @@ package org.elasticsearch.plugin.swagger.v1_2.rest;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.plugin.swagger.v1_2.model.SwaggerModel;
+import org.elasticsearch.rest.*;
 import org.elasticsearch.routes.ElasticsearchRoutesProvider;
 import org.elasticsearch.routes.RoutesProvider;
-import org.elasticsearch.rest.*;
-import org.elasticsearch.plugin.swagger.v1_2.model.SwaggerModel;
 
 import static org.elasticsearch.rest.RestStatus.OK;
 
@@ -26,13 +26,12 @@ public abstract class RequestHandler extends BaseRestHandler {
             response.addHeader("Access-Control-Allow-Methods", "GET");
 
             channel.sendResponse(response);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw ex;
         }
     }
-    
+
     protected RoutesProvider getMetadataProvider(RestRequest request, Client client) {
         return new ElasticsearchRoutesProvider(client, request.param("indexOrAlias"));
     }

@@ -1,23 +1,22 @@
 package org.elasticsearch.routes.root;
 
-import net.itimothy.rest.description.Route;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.routes.CompositeRoutesProvider;
 import org.elasticsearch.routes.ModelsCatalog;
 import org.elasticsearch.routes.RoutesProvider;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
-public class RootRoutesProvider extends RoutesProvider {
+public class RootRoutesProvider extends CompositeRoutesProvider {
 
-    private final List<RoutesProvider> metadataProviders;
+    private final List<RoutesProvider> routeProviders;
 
     public RootRoutesProvider(Client client, ModelsCatalog modelsCatalog) {
         super("Root", client, modelsCatalog);
 
-        this.metadataProviders = asList(
+        this.routeProviders = asList(
             new SearchRoutes(getModelsCatalog(), client),
             new IndexRoutes(getModelsCatalog(), client),
             new MappingRoutes(getModelsCatalog(), client),
@@ -26,9 +25,7 @@ public class RootRoutesProvider extends RoutesProvider {
     }
 
     @Override
-    public List<Route> getRoutesInternal() {
-        return metadataProviders.stream()
-            .flatMap(p -> p.getRoutes().stream())
-            .collect(Collectors.toList());
+    protected List<RoutesProvider> getRoutesProviders() {
+        return routeProviders;
     }
 }

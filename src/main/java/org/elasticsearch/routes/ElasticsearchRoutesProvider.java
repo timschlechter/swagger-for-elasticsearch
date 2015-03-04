@@ -7,16 +7,13 @@ import org.elasticsearch.routes.index.IndexRoutesProvider;
 import org.elasticsearch.routes.root.RootRoutesProvider;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.asList;
 
 /**
  * Provides Elasticsearch's API metadata in a generic format
  */
 public class ElasticsearchRoutesProvider extends RoutesProvider {
 
-    private final List<RoutesProvider> metadataProviders;
+    private final RoutesProvider routesProvider;
 
     public ElasticsearchRoutesProvider(Client client, String indexOrAlias) {
         this(client, new ModelsCatalog(client, indexOrAlias), indexOrAlias);
@@ -25,19 +22,13 @@ public class ElasticsearchRoutesProvider extends RoutesProvider {
     public ElasticsearchRoutesProvider(Client client, ModelsCatalog modelsCatalog, String indexOrAlias) {
         super("Elasticsearch", client, modelsCatalog);
 
-        if (StringUtils.isBlank(indexOrAlias)) {
-            // Root route providers
-            this.metadataProviders = asList(new RootRoutesProvider(client, getModelsCatalog()));
-        } else {
-            // Index route providers
-            this.metadataProviders = asList(new IndexRoutesProvider(client, getModelsCatalog(), indexOrAlias));
-        }
+        routesProvider = StringUtils.isBlank(indexOrAlias)
+            ? new RootRoutesProvider(client, getModelsCatalog())
+            : new IndexRoutesProvider(client, getModelsCatalog(), indexOrAlias);
     }
 
     @Override
-    public List<Route> getRoutesInternal() {
-        return metadataProviders.stream()
-            .flatMap(p -> p.getRoutes().stream())
-            .collect(Collectors.toList());
+    protected List<Route> getRoutesInternal() {
+        return routesProvider.getRoutes();
     }
 }
