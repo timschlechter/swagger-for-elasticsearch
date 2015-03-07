@@ -1,4 +1,4 @@
-Swagger plugin for Elasticsearch
+Swagger plugin for Elasticsearch [![Build Status](https://travis-ci.org/TimSchlechter/elasticsearch-swagger.svg?branch=master)](https://travis-ci.org/TimSchlechter/elasticsearch-swagger)
 ================================
 Provides [Swagger](http://swagger.io/) documentation for your Elasticsearch cluster.
 
