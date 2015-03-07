@@ -16,7 +16,7 @@ public class ElasticsearchRoutesProvider extends RoutesProvider {
     private final RoutesProvider routesProvider;
 
     public ElasticsearchRoutesProvider(Client client, String indexOrAlias) {
-        this(client, new ModelsCatalog(client, indexOrAlias), indexOrAlias);
+        this(client, new ModelsCatalog(client), indexOrAlias);
     }
 
     public ElasticsearchRoutesProvider(Client client, ModelsCatalog modelsCatalog, String indexOrAlias) {

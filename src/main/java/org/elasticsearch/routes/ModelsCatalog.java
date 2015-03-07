@@ -6,15 +6,13 @@ import net.itimothy.rest.description.Property;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
+import org.elasticsearch.common.base.MoreObjects;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import org.elasticsearch.routes.util.SimpleCache;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 import static java.util.Arrays.asList;
@@ -196,17 +194,12 @@ public class ModelsCatalog {
                 .required(true)
                 .model(HITS).build()
         ).build();
+    
     private final Client client;
-    Map<String, List<Model>> indexTypeModelsMap;
-    Map<String, List<Model>> indexDocumentModelsMap;
-    Map<String, List<Model>> indexDocumentSearchResultModelsMap;
     private SimpleCache cache = new SimpleCache();
-    private String indexOrAlias;
 
-
-    public ModelsCatalog(Client client, String indexOrAlias) {
+    public ModelsCatalog(Client client) {
         this.client = client;
-        this.indexOrAlias = indexOrAlias;
     }
 
     private static Model mappingTypeToModel(String mappingType) {
@@ -242,7 +235,7 @@ public class ModelsCatalog {
         return getDocumentModelId(index, typeName) + "SearchResult";
     }
 
-    public IndexModelsMap getIndexTypeModelsMap() {
+    protected IndexModelsMap getIndexTypeModelsMap() {
         return cache.getOrResolve("getIndexTypeModelsMap",
             new Callable<IndexModelsMap>() {
                 @Override
@@ -261,10 +254,11 @@ public class ModelsCatalog {
                         for (ObjectCursor<String> typeCursor : typeMappings.keys()) {
                             String typeName = typeCursor.value;
 
-                            Map mappingProperties = null;
+                            Map mappingProperties;
                             try {
                                 mappingProperties = (Map) typeMappings.get(typeCursor.value).getSourceAsMap().get("properties");
                             } catch (IOException e) {
+                                mappingProperties = Collections.emptyMap();
                                 e.printStackTrace();
                             }
 
@@ -276,7 +270,7 @@ public class ModelsCatalog {
                                     String mappingType = fieldMapping.containsKey("type") ? fieldMapping.get("type").toString() : "string";
                                     properties.add(
                                         Property.builder()
-                                            .name(propertyName.toString())
+                                            .name(propertyName)
                                             .model(mappingType != null ? mappingTypeToModel(mappingType) : null).build()
                                     );
                                 }
@@ -297,7 +291,7 @@ public class ModelsCatalog {
         );
     }
 
-    public IndexModelsMap getIndexDocumentModelsMap() {
+    protected IndexModelsMap getIndexDocumentModelsMap() {
         return cache.getOrResolve("getIndexDocumentModelsMap",
             new Callable<IndexModelsMap>() {
                 @Override
@@ -322,7 +316,7 @@ public class ModelsCatalog {
         );
     }
 
-    public IndexModelsMap getIndexDocumentSearchResultModelsMap() {
+    protected IndexModelsMap getIndexDocumentSearchResultModelsMap() {
         return cache.getOrResolve("getIndexDocumentSearchResultModelsMap",
             new Callable<IndexModelsMap>() {
                 @Override
@@ -348,19 +342,14 @@ public class ModelsCatalog {
     }
 
     public List<Model> getIndexTypeModels(String indexName) {
-        return getIndexTypeModelsMap().get(indexName);
+        return MoreObjects.firstNonNull(
+            getIndexTypeModelsMap().get(indexName),
+            Collections.<Model>emptyList()
+        );
     }
 
     public List<Model> getTypeModels() {
         return getIndexTypeModelsMap().getAllModels();
-    }
-
-    public List<Model> getDocumentModels() {
-        return getIndexDocumentModelsMap().getAllModels();
-    }
-
-    public Model getTypeModel(String index, String typeName) {
-        return getIndexTypeModelsMap().getModel(getTypeModelId(index, typeName));
     }
 
     public Model getDocumentModel(String index, String typeName) {

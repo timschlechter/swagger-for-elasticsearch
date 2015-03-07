@@ -29,7 +29,7 @@ class SearchRoutes extends BaseIndexRoutes {
                         .addAll(defaultUriSearchParams())
                         .build()
                 )
-                .model(getModelsCatalog().SEARCH_RESULT).build(),
+                .model(ModelsCatalog.SEARCH_RESULT).build(),
 
             Route.builder()
                 .method(HttpMethod.GET)
@@ -41,7 +41,7 @@ class SearchRoutes extends BaseIndexRoutes {
                         .addAll(defaultUriSearchParams())
                         .build()
                 )
-                .model(getModelsCatalog().SEARCH_RESULT).build()
+                .model(ModelsCatalog.SEARCH_RESULT).build()
         );
     }
 }

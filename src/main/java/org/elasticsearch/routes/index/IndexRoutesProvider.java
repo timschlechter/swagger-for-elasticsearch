@@ -6,7 +6,7 @@ import org.elasticsearch.routes.CompositeRoutesProvider;
 import org.elasticsearch.routes.ModelsCatalog;
 import org.elasticsearch.routes.RoutesProvider;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class IndexRoutesProvider extends CompositeRoutesProvider {
@@ -18,10 +18,11 @@ public class IndexRoutesProvider extends CompositeRoutesProvider {
 
         this.indexOrAlias = indexOrAlias;
 
-        this.routeProviders = new ArrayList<>();
-        this.routeProviders.add(new SearchRoutes(client, getModelsCatalog(), indexOrAlias));
-        this.routeProviders.add(new MappingRoutes(client, getModelsCatalog(), indexOrAlias));
-        this.routeProviders.add(new DocumentRoutes(client, getModelsCatalog(), indexOrAlias));
+        this.routeProviders = Arrays.<RoutesProvider>asList(
+            new SearchRoutes(client, getModelsCatalog(), indexOrAlias),
+            new MappingRoutes(client, getModelsCatalog(), indexOrAlias), 
+            new DocumentRoutes(client, getModelsCatalog(), indexOrAlias)
+        );
     }
 
     @Override

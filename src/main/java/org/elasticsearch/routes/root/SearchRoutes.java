@@ -26,7 +26,7 @@ class SearchRoutes extends RoutesProvider {
                 .apiPath("_search")
                 .description("Search in all indices and type using a URI by providing request parameters")
                 .parameters(defaultUriSearchParams())
-                .model(getModelsCatalog().SEARCH_RESULT).build(),
+                .model(ModelsCatalog.SEARCH_RESULT).build(),
 
             Route.builder()
                 .method(HttpMethod.GET)
@@ -38,7 +38,7 @@ class SearchRoutes extends RoutesProvider {
                         .addAll(defaultUriSearchParams())
                         .build()
                 )
-                .model(getModelsCatalog().SEARCH_RESULT).build(),
+                .model(ModelsCatalog.SEARCH_RESULT).build(),
 
             Route.builder()
                 .method(HttpMethod.GET)
@@ -51,7 +51,7 @@ class SearchRoutes extends RoutesProvider {
                         .addAll(defaultUriSearchParams())
                         .build()
                 )
-                .model(getModelsCatalog().SEARCH_RESULT).build()
+                .model(ModelsCatalog.SEARCH_RESULT).build()
         );
     }
 }

@@ -30,7 +30,7 @@ class SwaggerMetadataConverter {
 
     private static List<Property> flattenProperties(net.itimothy.rest.description.Model model) {
         if (model == null) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         List<Property> result = new ArrayList<>(model.getProperties());

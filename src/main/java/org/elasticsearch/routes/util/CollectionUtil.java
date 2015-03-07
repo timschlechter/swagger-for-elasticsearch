@@ -15,6 +15,10 @@ public class CollectionUtil {
      * @param keyExtractor The function which produces the value to compare
      */
     public static <T, K extends Comparable> void sort(List<T> items, final Function<T, K> keyExtractor) {
+        if (items == null) {
+            return;
+        }
+
         java.util.Collections.sort(
             items,
             new Comparator<T>() {
