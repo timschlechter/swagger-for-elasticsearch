@@ -83,6 +83,13 @@ class SwaggerMetadataConverter {
         for (Route apiRoute : apiRoutes) {
             operations.add(toOperation(apiRoute));
         }
+        
+        CollectionUtil.sort(operations, new Function<Operation, Comparable>() {
+            @Override
+            public Comparable apply(Operation operation) {
+                return operation.getMethod();
+            }
+        });
 
         return Api.builder()
             .path("/" + apiRoutes.get(0).getApiPath())

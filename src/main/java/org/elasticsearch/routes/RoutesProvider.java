@@ -130,7 +130,27 @@ public abstract class RoutesProvider {
             }
         }
 
+        Collections.sort(typeModelNames);
+
         return enumParam(name, paramType, typeModelNames)
+            .allowMultiple(true);
+    }
+
+    public Parameter.ParameterBuilder fieldSelectParam(String name, ParamType paramType) {
+        List<String> propertyNames = new ArrayList<>();
+        for (Model typeModel : modelsCatalog.getTypeModels()) {
+            if (typeModel.getProperties() != null) {
+                for (Property property : typeModel.getProperties()) {
+                    if (!propertyNames.contains(property.getName())) {
+                        propertyNames.add(property.getName());
+                    }
+                }
+            }
+        }
+
+        Collections.sort(propertyNames);
+
+        return enumParam(name, paramType, propertyNames)
             .allowMultiple(true);
     }
 

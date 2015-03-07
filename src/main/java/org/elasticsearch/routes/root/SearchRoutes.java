@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 
 class SearchRoutes extends RoutesProvider {
     public SearchRoutes(ModelsCatalog modelsCatalog, Client client) {
-        super("Search APIs", client, modelsCatalog);
+        super("Search", client, modelsCatalog);
     }
 
     @Override

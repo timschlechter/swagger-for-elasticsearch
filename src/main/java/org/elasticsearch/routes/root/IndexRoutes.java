@@ -14,7 +14,7 @@ import static java.util.Arrays.asList;
 
 class IndexRoutes extends RoutesProvider {
     public IndexRoutes(ModelsCatalog modelsCatalog, Client client) {
-        super("Index APIs", client, modelsCatalog);
+        super("Index management", client, modelsCatalog);
     }
 
     @Override
@@ -23,10 +23,33 @@ class IndexRoutes extends RoutesProvider {
             Route.builder()
                 .method(HttpMethod.GET)
                 .apiPath("{index}")
+                .description("Retrieve information about one or more indexes")
+                .notes("The following example gets the information for an index called twitter. Specifying an index, alias or wildcard expression is required.\n" +
+                    "\n" +
+                    "$ curl -XGET 'http://localhost:9200/twitter/'\n" +
+                    "\n" +
+                    "The get index API can also be applied to more than one index, or on all indices by using _all or * as index.")
                 .model(ModelsCatalog.INDEX_FEATURES)
                 .parameters(
                     indexOrAliasSelectParam("index", ParamType.PATH).build()
                 ).build(),
+
+            Route.builder()
+                .method(HttpMethod.GET)
+                .apiPath("{index}/{features}")
+                .description("Retrieve information about one or more indexes")
+                .notes("The information returned by the get API can be filtered to include only specific features by specifying a comma delimited list of features in the URL:\n" +
+                    "\n" +
+                    "$ curl -XGET 'http://localhost:9200/twitter/_settings,_mappings'\n" +
+                    "The above command will only return the settings and mappings for the index called twitter.\n" +
+                    "\n" +
+                    "The available features are _settings, _mappings, _warmers and _aliases.")
+                .parameters(
+                    indexOrAliasSelectParam("index", ParamType.PATH).build(),
+                    enumParam("features", ParamType.PATH, "_settings", "_mappings", "_warmers", "_aliases")
+                        .allowMultiple(true).build()
+                )
+                .model(ModelsCatalog.INDEX_FEATURES).build(),
 
             Route.builder()
                 .method(HttpMethod.DELETE)
@@ -50,17 +73,6 @@ class IndexRoutes extends RoutesProvider {
                 .parameters(
                     indexParam("index", ParamType.PATH).build()
                 ).build(),
-
-            Route.builder()
-                .method(HttpMethod.GET)
-                .apiPath("{index}/{features}")
-                .parameters(
-                    indexOrAliasSelectParam("index", ParamType.PATH).build(),
-                    enumParam("features", ParamType.PATH, "_settings", "_mappings", "_warmers", "_aliases")
-                        .allowMultiple(true).build()
-                )
-                .model(ModelsCatalog.INDEX_FEATURES)
-                .build(),
 
             Route.builder()
                 .method(HttpMethod.PUT)

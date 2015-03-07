@@ -17,10 +17,10 @@ public class RootRoutesProvider extends CompositeRoutesProvider {
         super("Root", client, modelsCatalog);
 
         this.routeProviders = asList(
-            new SearchRoutes(getModelsCatalog(), client),
             new IndexRoutes(getModelsCatalog(), client),
             new MappingRoutes(getModelsCatalog(), client),
-            new AliasRoutes(getModelsCatalog(), client)
+            new AliasRoutes(getModelsCatalog(), client),
+            new SearchRoutes(getModelsCatalog(), client)
         );
     }
 

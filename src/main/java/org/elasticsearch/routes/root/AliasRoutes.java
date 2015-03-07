@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 
 class AliasRoutes extends RoutesProvider {
     public AliasRoutes(ModelsCatalog modelsCatalog, Client client) {
-        super("Alias APIs", client, modelsCatalog);
+        super("Alias management", client, modelsCatalog);
     }
 
     @Override
