@@ -20,6 +20,7 @@ public class RootRoutesProvider extends CompositeRoutesProvider {
             new IndexRoutes(getModelsCatalog(), client),
             new MappingRoutes(getModelsCatalog(), client),
             new AliasRoutes(getModelsCatalog(), client),
+            new IndexSettingsRoutes(getModelsCatalog(), client),
             new SearchRoutes(getModelsCatalog(), client)
         );
     }

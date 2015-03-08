@@ -35,5 +35,8 @@ This plugin is currently in development, no releases have been published yet. If
 ```
 ./bin/plugin --u file:///path/to/plugin.zip --i swagger 
 ```
- 
 
+Screenshots
+-----------
+
+<img src="https://dl.dropboxusercontent.com/u/17880436/elasticsearch-swagger-screenshot.png" width="100%" />

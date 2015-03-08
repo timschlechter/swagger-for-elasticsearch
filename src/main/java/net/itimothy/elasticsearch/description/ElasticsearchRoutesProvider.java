@@ -1,15 +1,15 @@
 package net.itimothy.elasticsearch.description;
 
+import net.itimothy.elasticsearch.description.index.IndexRoutesProvider;
+import net.itimothy.elasticsearch.description.root.RootRoutesProvider;
 import net.itimothy.rest.description.Route;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.lang3.StringUtils;
-import net.itimothy.elasticsearch.description.index.IndexRoutesProvider;
-import net.itimothy.elasticsearch.description.root.RootRoutesProvider;
 
 import java.util.List;
 
 /**
- * Provides Elasticsearch's API metadata in a generic format
+ * Provides Elasticsearch API metadata in a generic format
  */
 public class ElasticsearchRoutesProvider extends RoutesProvider {
 
