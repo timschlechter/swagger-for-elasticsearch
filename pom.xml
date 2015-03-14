@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.itimothy.elasticsearch.plugin</groupId>
-    <artifactId>elasticsearch-swagger</artifactId>
+    <artifactId>swagger-for-elasticsearch</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Elasticsearch Swagger plugin</name>
+    <name>Swagger for Elasticsearch</name>
     <description>Provides Swagger documentation for your Elasticsearch cluster.</description>
-    <url>https://github.com/TimSchlechter/elasticsearch-swagger</url>
+    <url>https://github.com/TimSchlechter/swagger-for-elasticsearch</url>
 
     <licenses>
         <license>
@@ -20,9 +20,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:TimSchlechter/elasticsearch-swagger.git</connection>
-        <developerConnection>scm:git:git@github.com:TimSchlechter/elasticsearch-swagger.git</developerConnection>
-        <url>http://github.com/TimSchlechter/elasticsearch-swagger</url>
+        <connection>scm:git:git@github.com:TimSchlechter/swagger-for-elasticsearch.git</connection>
+        <developerConnection>scm:git:git@github.com:TimSchlechter/swagger-for-elasticsearch.git</developerConnection>
+        <url>http://github.com/TimSchlechter/swagger-for-elasticsearch</url>
     </scm>
 
     <properties>
@@ -104,7 +104,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/src/main/resources/elasticsearch-swagger-ui/dist
+                                        ${basedir}/src/main/resources/swagger-for-elasticsearch-ui/dist
                                     </directory>
                                     <filtering>false</filtering>
                                 </resource>

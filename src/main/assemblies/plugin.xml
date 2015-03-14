@@ -17,7 +17,7 @@
     </dependencySets>
     <fileSets>
         <fileSet>
-            <directory>${basedir}/src/main/resources/elasticsearch-swagger-ui/dist</directory>
+            <directory>${basedir}/src/main/resources/swagger-for-elasticsearch-ui/dist</directory>
             <outputDirectory>/_site</outputDirectory>
             <includes>
                 <include>**/*.*</include>

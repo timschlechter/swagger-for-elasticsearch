@@ -1,5 +1,5 @@
-Swagger plugin for Elasticsearch [![Build Status](https://travis-ci.org/TimSchlechter/elasticsearch-swagger.svg?branch=master)](https://travis-ci.org/TimSchlechter/elasticsearch-swagger)
-================================
+Swagger for Elasticsearch [![Build Status](https://travis-ci.org/TimSchlechter/swagger-for-elasticsearch.svg?branch=master)](https://travis-ci.org/TimSchlechter/swagger-for-elasticsearch)
+=========================
 Provides [Swagger](http://swagger.io/) documentation for your Elasticsearch cluster.
 
 __Note:__ This plugin does not aim to be the ultimate management tool for Elasticsearch, there are [far better plugins for doing this](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-plugins.html#known-plugins). It tries to make it easy to discover and learn about the APIs, and makes it possible to invoke/test APIs quickly.
@@ -39,4 +39,4 @@ This plugin is currently in development, no releases have been published yet. If
 Screenshots
 -----------
 
-<img src="https://dl.dropboxusercontent.com/u/17880436/elasticsearch-swagger-screenshot.png" width="100%" />
+<img src="https://dl.dropboxusercontent.com/u/17880436/swagger-for-elasticsearch.png" width="100%" />
