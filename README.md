@@ -1,4 +1,4 @@
-Swagger for Elasticsearch [![Build Status](https://travis-ci.org/timschlechter/swagger-for-elasticsearch.svg?branch=master)](https://travis-ci.org/TimSchlechter/swagger-for-elasticsearch)
+Swagger for Elasticsearch [![Build Status](https://travis-ci.org/timschlechter/swagger-for-elasticsearch.svg?branch=master)](https://travis-ci.org/timschlechter/swagger-for-elasticsearch)
 =========================
 Provides [Swagger](http://swagger.io/) documentation for your Elasticsearch cluster.
 
