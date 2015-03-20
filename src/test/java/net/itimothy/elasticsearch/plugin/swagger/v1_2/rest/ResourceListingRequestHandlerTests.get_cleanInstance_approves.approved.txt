@@ -1,0 +1,24 @@
+{
+  "swaggerVersion": "1.2",
+  "apis": [
+    {
+      "path": "/Index management"
+    },
+    {
+      "path": "/Mapping management"
+    },
+    {
+      "path": "/Alias management"
+    },
+    {
+      "path": "/Index settings"
+    },
+    {
+      "path": "/Search"
+    }
+  ],
+  "apiVersion": "1.4.4",
+  "info": {
+    "title": "Elasticsearch 1.4.4 API"
+  }
+}

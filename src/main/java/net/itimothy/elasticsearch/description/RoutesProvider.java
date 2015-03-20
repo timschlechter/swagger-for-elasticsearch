@@ -57,12 +57,6 @@ public abstract class RoutesProvider {
         return Info.builder()
             .version(currentNode.getVersion().number())
             .title("Elasticsearch " + currentNode.getVersion().number() + " API")
-            .description(
-                String.format("Hostname: %s\n\nNode: %s",
-                    currentNode.getHostName(),
-                    currentNode.getName()
-                )
-            )
             .build();
     }
 

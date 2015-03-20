@@ -45,9 +45,6 @@ public class Info extends SwaggerModel {
         if (title == null) {
             throw new NullPointerException("title");
         }
-        if (description == null) {
-            throw new NullPointerException("routes");
-        }
         this.title = title;
         this.description = description;
         this.termsOfServiceUrl = termsOfServiceUrl;

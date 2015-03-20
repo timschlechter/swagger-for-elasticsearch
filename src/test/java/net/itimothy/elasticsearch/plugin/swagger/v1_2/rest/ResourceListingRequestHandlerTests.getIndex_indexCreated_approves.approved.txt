@@ -1,0 +1,18 @@
+{
+  "swaggerVersion": "1.2",
+  "apis": [
+    {
+      "path": "/Search APIs"
+    },
+    {
+      "path": "/Mapping APIs"
+    },
+    {
+      "path": "/Document APIs"
+    }
+  ],
+  "apiVersion": "1.4.4",
+  "info": {
+    "title": "Elasticsearch 1.4.4 API"
+  }
+}
