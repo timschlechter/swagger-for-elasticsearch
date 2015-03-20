@@ -14,7 +14,7 @@ import org.junit.Before;
 
 import java.io.IOException;
 
-public class SwaggerApprovalTests {
+public class SwaggerApprovalTest {
     static final String PLUGIN_BASE_URI = "http://localhost:9201/_swagger/";
 
     protected ElasticsearchServer server;

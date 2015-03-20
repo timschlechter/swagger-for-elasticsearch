@@ -55,6 +55,13 @@
             <version>4.4</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <version>0.13</version>
+            <systemPath>${basedir}/src/test/resources/ApprovalTests.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
     </dependencies>
 
     <build>
