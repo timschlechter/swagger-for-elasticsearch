@@ -24,7 +24,7 @@ public class ApiSpecsRoutesProvider extends RoutesProvider {
     @Override
     protected List<Route> getRoutesInternal() {
         try {
-            URL url = ApiSpecsRoutesProvider.class.getResource("/api-specs/1.4");
+            URL url = ApiSpecsRoutesProvider.class.getResource("/rest-api-spec/1.5");
             File dir = new File(url.toURI());
             for (File file : dir.listFiles()) {
                 String json = new String(readAllBytes(get(file.getPath())));
