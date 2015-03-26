@@ -1,4 +1,4 @@
-package net.itimothy.elasticsearch.description.root;
+package net.itimothy.elasticsearch.description.root._old;
 
 import net.itimothy.rest.description.*;
 import org.elasticsearch.client.Client;

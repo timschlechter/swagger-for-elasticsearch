@@ -1,6 +1,7 @@
 package net.itimothy.elasticsearch.description;
 
 import net.itimothy.rest.description.*;
+import org.elasticsearch.Version;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.common.lang3.StringUtils;
@@ -52,12 +53,17 @@ public abstract class RoutesProvider {
 
     protected abstract List<Route> getRoutesInternal();
 
-    public Info getInfo() {
+    protected Version getElasticsearchVersion() {
         DiscoveryNode currentNode = getCurrentNode();
 
+        return currentNode.getVersion();
+    }
+
+    public Info getInfo() {
         return Info.builder()
-            .version(currentNode.getVersion().number())
-            .title("Elasticsearch " + currentNode.getVersion().number() + " API")
+            .version(getElasticsearchVersion().toString())
+            .title("Elasticsearch " + getElasticsearchVersion() + " API")
+            .description("test")
             .build();
     }
 
