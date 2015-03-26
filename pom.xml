@@ -116,7 +116,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        ${basedir}/src/main/resources/swagger-for-elasticsearch-ui/dist
+                                        ${basedir}/swagger-for-elasticsearch-ui/dist
                                     </directory>
                                     <filtering>false</filtering>
                                 </resource>

@@ -1,6 +1,3 @@
-[submodule "src/main/resources/swagger-for-elasticsearch-ui"]
-	path = src/main/resources/swagger-for-elasticsearch-ui
-	url = https://github.com/TimSchlechter/swagger-for-elasticsearch-ui.git
 [submodule "rest-api-spec/0.90"]
 	path = rest-api-spec/0.90
 	url = https://github.com/elastic/elasticsearch
@@ -22,3 +19,6 @@
 [submodule "rest-api-spec/1.5"]
 	path = rest-api-spec/1.5
 	url = https://github.com/elastic/elasticsearch
+[submodule "swagger-for-elasticsearch-ui"]
+	path = swagger-for-elasticsearch-ui
+	url = https://github.com/timschlechter/swagger-for-elasticsearch-ui.git
