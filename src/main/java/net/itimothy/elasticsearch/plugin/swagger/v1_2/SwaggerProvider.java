@@ -1,7 +1,7 @@
 package net.itimothy.elasticsearch.plugin.swagger.v1_2;
 
-import net.itimothy.rest.description.Info;
-import net.itimothy.rest.description.Route;
+import net.itimothy.elasticsearch.routes.model.Info;
+import net.itimothy.elasticsearch.routes.model.Route;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.ApiDeclaration;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.resourceListing.ResourceListing;
 

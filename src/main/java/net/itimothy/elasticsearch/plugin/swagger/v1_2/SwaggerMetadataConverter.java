@@ -1,6 +1,6 @@
 package net.itimothy.elasticsearch.plugin.swagger.v1_2;
 
-import net.itimothy.rest.description.*;
+import net.itimothy.elasticsearch.routes.model.*;
 import org.elasticsearch.common.base.Function;
 import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.lang3.StringUtils;
@@ -12,23 +12,23 @@ import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.Param
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.resourceListing.Info;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.resourceListing.Resource;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.resourceListing.ResourceListing;
-import net.itimothy.elasticsearch.description.util.CollectionUtil;
+import net.itimothy.util.CollectionUtil;
 
 import java.util.*;
 
 class SwaggerMetadataConverter {
-    private static final Map<net.itimothy.rest.description.HttpMethod, HttpMethod> httpMethodMap =
-        ImmutableMap.<net.itimothy.rest.description.HttpMethod, HttpMethod>builder()
-            .put(net.itimothy.rest.description.HttpMethod.DELETE, HttpMethod.DELETE)
-            .put(net.itimothy.rest.description.HttpMethod.GET, HttpMethod.GET)
-            .put(net.itimothy.rest.description.HttpMethod.OPTIONS, HttpMethod.OPTIONS)
-            .put(net.itimothy.rest.description.HttpMethod.PATCH, HttpMethod.PATCH)
-            .put(net.itimothy.rest.description.HttpMethod.POST, HttpMethod.POST)
-            .put(net.itimothy.rest.description.HttpMethod.PUT, HttpMethod.PUT)
-            .put(net.itimothy.rest.description.HttpMethod.HEAD, HttpMethod.HEAD)
+    private static final Map<net.itimothy.elasticsearch.routes.model.HttpMethod, HttpMethod> httpMethodMap =
+        ImmutableMap.<net.itimothy.elasticsearch.routes.model.HttpMethod, HttpMethod>builder()
+            .put(net.itimothy.elasticsearch.routes.model.HttpMethod.DELETE, HttpMethod.DELETE)
+            .put(net.itimothy.elasticsearch.routes.model.HttpMethod.GET, HttpMethod.GET)
+            .put(net.itimothy.elasticsearch.routes.model.HttpMethod.OPTIONS, HttpMethod.OPTIONS)
+            .put(net.itimothy.elasticsearch.routes.model.HttpMethod.PATCH, HttpMethod.PATCH)
+            .put(net.itimothy.elasticsearch.routes.model.HttpMethod.POST, HttpMethod.POST)
+            .put(net.itimothy.elasticsearch.routes.model.HttpMethod.PUT, HttpMethod.PUT)
+            .put(net.itimothy.elasticsearch.routes.model.HttpMethod.HEAD, HttpMethod.HEAD)
             .build();
 
-    private static List<Property> flattenProperties(net.itimothy.rest.description.Model model) {
+    private static List<Property> flattenProperties(net.itimothy.elasticsearch.routes.model.Model model) {
         if (model == null) {
             return Collections.emptyList();
         }
@@ -48,7 +48,7 @@ class SwaggerMetadataConverter {
         return StringUtils.capitalize(value);
     }
 
-    public HttpMethod convert(net.itimothy.rest.description.HttpMethod httpMethod) {
+    public HttpMethod convert(net.itimothy.elasticsearch.routes.model.HttpMethod httpMethod) {
         return httpMethodMap.containsKey(httpMethod) ? httpMethodMap.get(httpMethod) : null;
     }
 
@@ -135,22 +135,22 @@ class SwaggerMetadataConverter {
         return result;
     }
 
-    private List<Parameter> toParameters(List<net.itimothy.rest.description.Parameter> parameters) {
+    private List<Parameter> toParameters(List<net.itimothy.elasticsearch.routes.model.Parameter> parameters) {
         if (parameters == null) {
             return null;
         }
 
         List<Parameter> result = new ArrayList<>();
 
-        for (net.itimothy.rest.description.Parameter parameter : parameters) {
+        for (net.itimothy.elasticsearch.routes.model.Parameter parameter : parameters) {
             result.add(toParameter(parameter));
         }
 
         return result;
     }
 
-    private Parameter toParameter(net.itimothy.rest.description.Parameter parameter) {
-        net.itimothy.rest.description.Model model = parameter.getModel();
+    private Parameter toParameter(net.itimothy.elasticsearch.routes.model.Parameter parameter) {
+        net.itimothy.elasticsearch.routes.model.Model model = parameter.getModel();
         Primitive primitive = model instanceof Primitive ? (Primitive) model : null;
 
         ParameterType paramType = convert(parameter.getParamType());
@@ -195,7 +195,7 @@ class SwaggerMetadataConverter {
     }
 
     public Map<String, Model> toModels(List<Route> routes) {
-        Set<net.itimothy.rest.description.Model> descriptionModels = new HashSet<>();
+        Set<net.itimothy.elasticsearch.routes.model.Model> descriptionModels = new HashSet<>();
 
         for (Route route : routes) {
             if (route.getModel() != null) {
@@ -211,7 +211,7 @@ class SwaggerMetadataConverter {
             }
 
             if (route.getParameters() != null) {
-                for (net.itimothy.rest.description.Parameter parameter : route.getParameters()) {
+                for (net.itimothy.elasticsearch.routes.model.Parameter parameter : route.getParameters()) {
                     if (parameter.getModel() != null) {
                         descriptionModels.add(parameter.getModel());
                     }
@@ -219,7 +219,7 @@ class SwaggerMetadataConverter {
             }
         }
 
-        for (net.itimothy.rest.description.Model model : new ArrayList<>(descriptionModels)) {
+        for (net.itimothy.elasticsearch.routes.model.Model model : new ArrayList<>(descriptionModels)) {
             if (model.getProperties() != null) {
                 for (Property property : flattenProperties(model)) {
                     if (property.getModel() != null) {
@@ -231,7 +231,7 @@ class SwaggerMetadataConverter {
 
         Map<String, Model> result = new HashMap<>();
 
-        for (net.itimothy.rest.description.Model descriptionModel : descriptionModels) {
+        for (net.itimothy.elasticsearch.routes.model.Model descriptionModel : descriptionModels) {
             if (!descriptionModel.isPrimitive()) {
                 Model model = toModel(descriptionModel);
                 result.put(model.getId(), model);
@@ -241,7 +241,7 @@ class SwaggerMetadataConverter {
         return result;
     }
 
-    private Model toModel(net.itimothy.rest.description.Model model) {
+    private Model toModel(net.itimothy.elasticsearch.routes.model.Model model) {
         List<String> requiredPropertyNames = new ArrayList<>();
         if (model.getProperties() != null) {
             for (Property property : model.getProperties()) {
@@ -266,7 +266,7 @@ class SwaggerMetadataConverter {
     }
 
     private ModelProperty toModelProperty(Property property) {
-        net.itimothy.rest.description.Model model = property.getModel();
+        net.itimothy.elasticsearch.routes.model.Model model = property.getModel();
         Primitive primitive = model instanceof Primitive ? (Primitive) model : null;
         ModelProperty.ModelPropertyBuilder modelProperty = ModelProperty.builder()
             .name(property.getName())
@@ -296,7 +296,7 @@ class SwaggerMetadataConverter {
         return modelProperty.build();
     }
 
-    public ResourceListing toResourceListing(net.itimothy.rest.description.Info info, List<Route> routes) {
+    public ResourceListing toResourceListing(net.itimothy.elasticsearch.routes.model.Info info, List<Route> routes) {
         List<String> resourcPaths = new ArrayList<>();
         for (Route route : routes) {
             String resourcePath = "/" + route.getGroup();

@@ -55,7 +55,6 @@ public class SwaggerApprovalTest {
 
     public void verify(String relativeUri) throws Exception {
         String result = httpGet(relativeUri);
-
         Approvals.verify(normalizeResult(result));
     }
 

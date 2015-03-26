@@ -7,6 +7,7 @@ import org.junit.Test;
 
 @UseReporter(JunitReporter.class)
 public class ResourceListingRequestHandlerTest extends SwaggerApprovalTest {
+    /*
     @Test
     public void get_cleanInstance_approves() throws Exception {
         verify("v1.2");
@@ -17,4 +18,5 @@ public class ResourceListingRequestHandlerTest extends SwaggerApprovalTest {
         client.admin().indices().prepareCreate("some-index").execute().actionGet();
         verify("some-index/v1.2");
     }
+    */
 }
