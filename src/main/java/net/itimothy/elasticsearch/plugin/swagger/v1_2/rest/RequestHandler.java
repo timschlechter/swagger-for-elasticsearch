@@ -1,5 +1,6 @@
 package net.itimothy.elasticsearch.plugin.swagger.v1_2.rest;
 
+import net.itimothy.elasticsearch.description.ApiSpecsRoutesProvider;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.SwaggerModel;
@@ -33,6 +34,8 @@ public abstract class RequestHandler extends BaseRestHandler {
     }
 
     protected RoutesProvider getMetadataProvider(RestRequest request, Client client) {
-        return new ElasticsearchRoutesProvider(client, request.param("indexOrAlias"));
+        return new ApiSpecsRoutesProvider(client);
+
+        //return new ElasticsearchRoutesProvider(client, request.param("indexOrAlias"));
     }
 }

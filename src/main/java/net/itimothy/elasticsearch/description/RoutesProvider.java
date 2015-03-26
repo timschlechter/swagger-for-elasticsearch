@@ -6,6 +6,7 @@ import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.common.lang3.StringUtils;
 import net.itimothy.elasticsearch.description.util.SimpleCache;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
