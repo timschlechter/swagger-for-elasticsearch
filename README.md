@@ -14,6 +14,20 @@ __Note:__ This plugin does not aim to be the ultimate management tool for Elasti
 
 Development
 -----------
+### Getting started ###
+Clone this repo:
+```
+git clone https://github.com/timschlechter/swagger-for-elasticsearch.git
+```
+
+This plugin uses the sources of some submodules to keep in sync with the [official spec files](https://github.com/elastic/elasticsearch/tree/master/rest-api-spec/api) and [swagger-ui](https://github.com/timschlechter/swagger-for-elasticsearch-ui). The spec files are in the main Elasticsearch repo, so we have to pull in every version of Elasticsearch we would like to support. I don't have a better way to do this, so:
+```
+cd swagger-for-elasticsearch
+git submodule init
+git submodule update
+```
+...and grab youself a cup of coffee. If someone has a suggestion to make this easier, please contact me :-)
+
 ### Package ###
 ```
 mvn package
