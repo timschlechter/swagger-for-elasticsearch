@@ -54,15 +54,28 @@ public abstract class RoutesProvider {
     }
 
     public List<Route> getRoutes(String category) {
+        List<Route> allRoutes = getRoutes();
         if (StringUtils.isBlank(category)) {
-            return getRoutes();
+            return allRoutes;
+        }
+
+        List<String> allCategories = new ArrayList<>();
+        for (Route route : allRoutes) {
+            if (!allCategories.contains(route.getCategory())) {
+                allCategories.add(route.getCategory());
+            }
         }
 
         List<Route> result = new ArrayList<>();
-
-        for (Route route : getRoutes()) {
-            if (route.getCategory().equals(category)) {
-                result.add(route);
+        for (Route route : allRoutes) {
+            if (route.getCategory().equals(category) || route.getGroup().equals(category)) {
+                if (category.equals("misc")) {
+                    if (!allCategories.contains(route.getGroup())) {
+                        result.add(route);
+                    }
+                } else {
+                    result.add(route);
+                }
             }
         }
 
