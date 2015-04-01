@@ -1,10 +1,10 @@
 package net.itimothy.elasticsearch.routes.defaultroutes;
 
-import net.itimothy.elasticsearch.routes.ModelsCatalog;
-import net.itimothy.elasticsearch.routes.RoutesProvider;
 import net.itimothy.elasticsearch.restapispec.OfficialRestApiSpecDataProvider;
 import net.itimothy.elasticsearch.restapispec.model.Api;
 import net.itimothy.elasticsearch.restapispec.model.Param;
+import net.itimothy.elasticsearch.routes.ModelsCatalog;
+import net.itimothy.elasticsearch.routes.RoutesProvider;
 import net.itimothy.elasticsearch.routes.model.*;
 import net.itimothy.util.CollectionUtil;
 import org.elasticsearch.client.Client;
@@ -96,7 +96,9 @@ public class OfficialRestApiSpecRoutesProvider extends RoutesProvider {
                         .description(param.description)
                         .defaultValue(param.defaultValue)
                         .model(toModel(name, param))
+                        .required(true)
                         .paramType(ParamType.PATH)
+                        .enumValues(param.options)
                         .build()
                 );
             }
@@ -113,6 +115,8 @@ public class OfficialRestApiSpecRoutesProvider extends RoutesProvider {
                         .defaultValue(param.defaultValue)
                         .model(toModel(name, param))
                         .paramType(ParamType.QUERY)
+                        .required(param.required)
+                        .enumValues(param.options)
                         .build()
                 );
             }
@@ -134,7 +138,22 @@ public class OfficialRestApiSpecRoutesProvider extends RoutesProvider {
     }
 
     private Model toModel(String name, Param param) {
-        return Primitive.STRING;
+        if (param.type == null) {
+            return Primitive.STRING;
+        }
+        switch (param.type) {
+            case "boolean":
+                return Primitive.BOOLEAN;
+            case "number":
+                return Primitive.DOUBLE;
+            case "time":
+                return Primitive.LONG;
+            case "duration":
+                return Primitive.LONG;
+            default:
+                return Primitive.STRING;
+        }
+
     }
 
     private HttpMethod toMethod(String method) {
