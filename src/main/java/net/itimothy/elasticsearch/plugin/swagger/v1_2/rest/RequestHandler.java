@@ -14,21 +14,16 @@ import static org.elasticsearch.rest.RestStatus.OK;
 
 public abstract class RequestHandler extends BaseRestHandler {
 
-    private final DefaultRoutesProvider defaultRoutesProvider;
-    private final ModelsCatalog modelsCatalog;
-
-    protected RequestHandler(Settings settings, RestController controller, Client client, DefaultRoutesProvider defaultRoutesProvider, ModelsCatalog modelsCatalog) {
+    protected RequestHandler(Settings settings, RestController controller, Client client) {
         super(settings, controller, client);
-        this.defaultRoutesProvider = defaultRoutesProvider;
-        this.modelsCatalog = modelsCatalog;
     }
 
-    protected abstract SwaggerModel handleRequest(RestRequest request, Client client) throws Exception;
+    protected abstract SwaggerModel handleRequest(RestRequest request, Client client, RoutesProvider routesProvider) throws Exception;
 
     @Override
     protected void handleRequest(RestRequest request, RestChannel channel, Client client) throws Exception {
         try {
-            SwaggerModel model = handleRequest(request, client);
+            SwaggerModel model = handleRequest(request, client, createMetadataProvider(request, client));
             RestResponse response = new BytesRestResponse(OK, "application/json", model.toJson());
 
             response.addHeader("Access-Control-Allow-Methods", "GET");
@@ -40,11 +35,11 @@ public abstract class RequestHandler extends BaseRestHandler {
         }
     }
 
-    protected RoutesProvider getMetadataProvider(RestRequest request, Client client) {
+    private RoutesProvider createMetadataProvider(RestRequest request, Client client) {
         String indexOrAlias = request.param("indexOrAlias");
 
         return StringUtils.isBlank(indexOrAlias)
-            ? defaultRoutesProvider
-            : new IndexRoutesProvider(client, modelsCatalog, indexOrAlias);
+            ? new DefaultRoutesProvider(client, new ModelsCatalog(client))
+            : new IndexRoutesProvider(client, new ModelsCatalog(client), indexOrAlias);
     }
 }

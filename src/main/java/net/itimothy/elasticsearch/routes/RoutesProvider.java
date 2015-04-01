@@ -1,9 +1,14 @@
 package net.itimothy.elasticsearch.routes;
 
 import net.itimothy.elasticsearch.routes.model.*;
+import net.itimothy.util.CollectionUtil;
 import org.elasticsearch.Version;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.cluster.node.DiscoveryNode;
+import org.elasticsearch.common.base.Function;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import org.elasticsearch.common.lang3.StringUtils;
 import net.itimothy.util.SimpleCache;
 
@@ -179,7 +184,7 @@ public abstract class RoutesProvider {
                 public List<String> call() throws Exception {
                     List<String> allIndices = new ArrayList<String>();
 
-                    allIndices.add("*");
+                    allIndices.add("_all");
                     allIndices.addAll(
                         asList(client.admin().indices()
                                 .prepareGetIndex()
@@ -201,14 +206,27 @@ public abstract class RoutesProvider {
             new Callable<List<String>>() {
                 @Override
                 public List<String> call() throws Exception {
-                    List<String> allAliases = asList(
-                        client.admin().indices()
-                            .prepareGetAliases()
-                            .get()
-                            .getAliases()
-                            .keys()
-                            .toArray(String.class)
-                    );
+                    List<String> allAliases = new ArrayList<String>();
+
+                    ImmutableOpenMap<String, List<AliasMetaData>> indexAliasesMap = client.admin().indices()
+                        .prepareGetAliases()
+                        .get()
+                        .getAliases();
+
+                    for (ObjectCursor<List<AliasMetaData>> listObjectCursor : indexAliasesMap.values()) {
+                        for (AliasMetaData aliasMetaData : listObjectCursor.value) {
+                            if (!allAliases.contains(aliasMetaData.alias())) {
+                                allAliases.add(aliasMetaData.alias());
+                            }
+                        }
+                    }
+
+                    CollectionUtil.sort(allAliases, new Function<String, Comparable>() {
+                        @Override
+                        public Comparable apply(String s) {
+                            return s;
+                        }
+                    });
 
                     return allAliases;
                 }

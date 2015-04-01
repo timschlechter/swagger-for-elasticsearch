@@ -23,10 +23,10 @@ public class OfficialRestApiSpecRoutesProvider extends RoutesProvider {
     private final OfficialRestApiSpecDataProvider officialRestApiSpecDataProvider;
 
     @Inject
-    public OfficialRestApiSpecRoutesProvider(Client client, ModelsCatalog modelsCatalog, OfficialRestApiSpecDataProvider officialRestApiSpecDataProvider) {
+    public OfficialRestApiSpecRoutesProvider(Client client, ModelsCatalog modelsCatalog) {
         super(client, modelsCatalog);
 
-        this.officialRestApiSpecDataProvider = officialRestApiSpecDataProvider;
+        this.officialRestApiSpecDataProvider = new OfficialRestApiSpecDataProvider();
     }
 
     @Override

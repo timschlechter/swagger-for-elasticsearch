@@ -16,18 +16,17 @@ import static org.elasticsearch.rest.RestRequest.Method.GET;
 
 public class ApiDeclarationRequestHandler extends RequestHandler {
     @Inject
-    public ApiDeclarationRequestHandler(Settings settings, Client client, RestController controller, DefaultRoutesProvider defaultRoutesProvider, ModelsCatalog modelsCatalog) {
-        super(settings, controller, client, defaultRoutesProvider, modelsCatalog);
+    public ApiDeclarationRequestHandler(Settings settings, Client client, RestController controller) {
+        super(settings, controller, client);
         controller.registerHandler(GET, API_DOCS_PATH + "/v1.2/{resource}", this);
         controller.registerHandler(GET, API_DOCS_PATH + "/{indexOrAlias}/v1.2/{resource}", this);
     }
 
     @Override
-    protected SwaggerModel handleRequest(RestRequest request, Client client) throws Exception {
-        RoutesProvider metadataProvider = getMetadataProvider(request, client);
+    protected SwaggerModel handleRequest(RestRequest request, Client client, RoutesProvider routesProvider) throws Exception {
         SwaggerProvider swaggerProvider = new SwaggerProvider(
-            metadataProvider.getInfo(),
-            metadataProvider.getRoutes()
+            routesProvider.getInfo(),
+            routesProvider.getRoutes()
         );
 
         return swaggerProvider.getApiDeclaration(request.param("resource"));

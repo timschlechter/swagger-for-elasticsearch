@@ -11,13 +11,13 @@ public class SwaggerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(CategoriesRequestHandler.class).asEagerSingleton();
+        bind(CategoriesRequestHandler.class);
 
-        bind(ResourceListingRequestHandler.class).asEagerSingleton();
-        bind(ApiDeclarationRequestHandler.class).asEagerSingleton();
+        bind(ResourceListingRequestHandler.class);
+        bind(ApiDeclarationRequestHandler.class);
 
-        bind(ModelsCatalog.class).asEagerSingleton();
-        bind(OfficialRestApiSpecDataProvider.class).asEagerSingleton();
+        bind(ModelsCatalog.class);
+        bind(OfficialRestApiSpecDataProvider.class);
     }
 
 }
