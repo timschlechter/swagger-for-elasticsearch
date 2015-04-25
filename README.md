@@ -15,6 +15,13 @@ Installation
 ./bin/plugin --url https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch.zip --install swagger
 ```
 
+You can access the plugin by going to:
+```
+http:/localhost:9200/_plugin/swagger
+```
+
+Alternatively, you could compile and install the plugin yourself. See the [documentation on plugins](http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-plugins.html) for more information.
+
 Development
 -----------
 ### Getting started ###
