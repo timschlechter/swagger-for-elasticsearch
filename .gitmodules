@@ -22,3 +22,6 @@
 [submodule "swagger-for-elasticsearch-ui"]
 	path = swagger-for-elasticsearch-ui
 	url = https://github.com/timschlechter/swagger-for-elasticsearch-ui.git
+[submodule "rest-api-spec/master"]
+	path = rest-api-spec/master
+	url = https://github.com/elastic/elasticsearch.git

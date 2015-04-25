@@ -240,6 +240,22 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-rest-api-spec-master</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/rest-api-spec/2.0</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/rest-api-spec/master/rest-api-spec/api</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
