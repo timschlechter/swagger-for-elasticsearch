@@ -25,3 +25,15 @@
 [submodule "rest-api-spec/master"]
 	path = rest-api-spec/master
 	url = https://github.com/elastic/elasticsearch.git
+[submodule "rest-api-spec/1.6"]
+	path = rest-api-spec/1.6
+	url = https://github.com/elastic/elasticsearch
+[submodule "rest-api-spec/1.7"]
+	path = rest-api-spec/1.7
+	url = https://github.com/elastic/elasticsearch
+[submodule "rest-api-spec/2.0"]
+	path = rest-api-spec/2.0
+	url = https://github.com/elastic/elasticsearch
+[submodule "rest-api-spec/2.1"]
+	path = rest-api-spec/2.1
+	url = https://github.com/elastic/elasticsearch

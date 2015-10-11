@@ -26,7 +26,7 @@
     </scm>
 
     <properties>
-        <elasticsearch.version>1.5.1</elasticsearch.version>
+        <elasticsearch.version>1.7.2</elasticsearch.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -241,7 +241,39 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-rest-api-spec-master</id>
+                        <id>copy-rest-api-spec-1.6</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/rest-api-spec/1.6</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/rest-api-spec/1.6/rest-api-spec/api</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-rest-api-spec-1.7</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/rest-api-spec/1.7</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/rest-api-spec/1.7/rest-api-spec/api</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-rest-api-spec-2.0</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -250,7 +282,39 @@
                             <outputDirectory>${basedir}/src/main/resources/rest-api-spec/2.0</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/rest-api-spec/master/rest-api-spec/api</directory>
+                                    <directory>${basedir}/rest-api-spec/2.0/rest-api-spec/src/main/resources/rest-api-spec/api</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-rest-api-spec-2.1</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/rest-api-spec/2.1/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/rest-api-spec/2.1/rest-api-spec/src/main/resources/rest-api-spec/api</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-rest-api-spec-master</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/rest-api-spec/3.0</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/rest-api-spec/master/rest-api-spec/src/main/resources/rest-api-spec/api</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
