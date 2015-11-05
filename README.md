@@ -6,7 +6,7 @@ __Note:__ This plugin does not aim to be the ultimate management tool for Elasti
 
 ### Features###
 * Runtime generation of the documentation based on the [official specs](https://github.com/elastic/elasticsearch/tree/master/rest-api-spec), just install the plugin and go
-* Automatically adapts to the version of your Elasticsearch installation. Support for Elasticsearch 0.90, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 2.0, 2.1 and the upcoming 3.0
+* Automatically adapts to the version of your Elasticsearch installation. Support for Elasticsearch 0.90, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7 and 2.0
 * Includes a slightly modified version of [Swagger UI](https://github.com/swagger-api/swagger-ui) to make it easy to switch index/alias API's
 
 Installation
