@@ -13,7 +13,7 @@ Installation
 ------------
 ```
 # Elasticsearch 2.0:
-./bin/plugin --url https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch-2.0.0.zip --install swagger
+sudo ./bin/plugin install https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch-2.0.0.zip
 
 # Elasticsearch 1.7.3 and below:
 ./bin/plugin --url https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch.zip --install swagger
