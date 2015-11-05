@@ -7,8 +7,8 @@
     <artifactId>swagger-for-elasticsearch</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Swagger for Elasticsearch</name>
-    <description>Provides Swagger documentation for your Elasticsearch cluster.</description>
+    <name>${project.name}</name>
+    <description>${project.description}</description>
     <url>https://github.com/TimSchlechter/swagger-for-elasticsearch</url>
 
     <licenses>
@@ -26,10 +26,19 @@
     </scm>
 
     <properties>
-        <elasticsearch.version>1.7.2</elasticsearch.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+
+        <project.name>Swagger for Elasticsearch</project.name>
+        <project.description>Provides Swagger documentation for your Elasticsearch cluster</project.description>
+        <project.versions>2.0.0</project.versions>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <elasticsearch.version>2.0.0</elasticsearch.version>
+        <elasticsearch.plugin.name>swagger</elasticsearch.plugin.name>
+        <elasticsearch.plugin.site>true</elasticsearch.plugin.site>
+        <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
+        <elasticsearch.plugin.classname>net.itimothy.elasticsearch.plugin.swagger.SwaggerPlugin</elasticsearch.plugin.classname>
     </properties>
 
     <dependencies>
@@ -39,9 +48,19 @@
             <version>${elasticsearch.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -91,26 +110,31 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>org.elasticsearch.bootstrap.Bootstrap</mainClass>
-                    <systemProperties>
-                        <property>
-                            <key>es.foreground</key>
-                            <value>yes</value>
-                        </property>
-                    </systemProperties>
-                    <workingDirectory>${basedir}</workingDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-plugin-descriptor</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/elasticsearch/plugins/swagger
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>plugin-descriptor.properties</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-swagger-ui</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>

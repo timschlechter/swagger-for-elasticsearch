@@ -1,10 +1,10 @@
 package net.itimothy.elasticsearch.routes.defaultroutes;
 
+import com.google.common.collect.ImmutableMap;
 import net.itimothy.elasticsearch.routes.ModelsCatalog;
 import net.itimothy.elasticsearch.routes.RoutesProvider;
 import net.itimothy.elasticsearch.routes.model.*;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.collect.ImmutableMap;
 import org.elasticsearch.common.inject.Inject;
 
 import java.util.ArrayList;

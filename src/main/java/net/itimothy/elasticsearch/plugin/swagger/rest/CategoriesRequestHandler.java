@@ -1,21 +1,18 @@
 package net.itimothy.elasticsearch.plugin.swagger.rest;
 
+import com.google.common.base.Function;
 import com.google.gson.GsonBuilder;
 import net.itimothy.elasticsearch.routes.ModelsCatalog;
 import net.itimothy.elasticsearch.routes.defaultroutes.DefaultRoutesProvider;
 import net.itimothy.elasticsearch.routes.model.Route;
 import net.itimothy.util.CollectionUtil;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.base.Function;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.util.CollectionUtils;
 import org.elasticsearch.rest.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static net.itimothy.elasticsearch.plugin.swagger.SwaggerPlugin.API_DOCS_PATH;
 import static org.elasticsearch.rest.RestRequest.Method.GET;

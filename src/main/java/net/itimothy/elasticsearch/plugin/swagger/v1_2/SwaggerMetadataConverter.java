@@ -1,9 +1,9 @@
 package net.itimothy.elasticsearch.plugin.swagger.v1_2;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
 import net.itimothy.elasticsearch.routes.model.*;
-import org.elasticsearch.common.base.Function;
-import org.elasticsearch.common.collect.ImmutableMap;
-import org.elasticsearch.common.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.Items;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.*;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.apiDeclaration.HttpMethod;
@@ -13,6 +13,7 @@ import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.resourceListing.Info
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.resourceListing.Resource;
 import net.itimothy.elasticsearch.plugin.swagger.v1_2.model.resourceListing.ResourceListing;
 import net.itimothy.util.CollectionUtil;
+import org.jboss.netty.util.internal.StringUtil;
 
 import java.util.*;
 

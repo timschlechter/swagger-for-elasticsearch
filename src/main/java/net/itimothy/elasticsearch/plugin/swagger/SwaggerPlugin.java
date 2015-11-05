@@ -1,12 +1,12 @@
 package net.itimothy.elasticsearch.plugin.swagger;
 
-import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.inject.Module;
-import org.elasticsearch.plugins.AbstractPlugin;
+import org.elasticsearch.plugins.Plugin;
 
 import java.util.Collection;
+import java.util.Collections;
 
-public class SwaggerPlugin extends AbstractPlugin {
+public class SwaggerPlugin extends Plugin {
     public final static String API_DOCS_PATH = "_swagger";
 
     @Override
@@ -20,10 +20,8 @@ public class SwaggerPlugin extends AbstractPlugin {
     }
 
     @Override
-    public Collection<Class<? extends Module>> modules() {
-        Collection<Class<? extends Module>> modules = Lists.newArrayList();
-        modules.add(SwaggerModule.class);
-        return modules;
+    public Collection<Module> nodeModules() {
+        return Collections.<Module>singletonList(new SwaggerModule());
     }
 
 }

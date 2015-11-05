@@ -1,6 +1,6 @@
 package net.itimothy.util;
 
-import org.elasticsearch.common.base.Function;
+import com.google.common.base.Function;
 
 import java.util.Comparator;
 import java.util.List;

@@ -1,14 +1,14 @@
 package net.itimothy.elasticsearch.routes;
 
+import com.carrotsearch.hppc.cursors.ObjectCursor;
+import com.google.common.base.MoreObjects;
 import net.itimothy.elasticsearch.routes.model.Model;
 import net.itimothy.elasticsearch.routes.model.Primitive;
 import net.itimothy.elasticsearch.routes.model.Property;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.common.base.MoreObjects;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
-import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import net.itimothy.util.SimpleCache;
 import org.elasticsearch.common.inject.Inject;
 

@@ -10,8 +10,10 @@
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
             <excludes>
                 <exclude>org.elasticsearch:elasticsearch</exclude>
+                <exclude>com.google.guava:guava</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>
@@ -24,4 +26,11 @@
             </includes>
         </fileSet>
     </fileSets>
+    <files>
+        <file>
+            <source>${basedir}/src/main/resources/plugin-descriptor.properties</source>
+            <outputDirectory></outputDirectory>
+            <filtered>true</filtered>
+        </file>
+    </files>
 </assembly>

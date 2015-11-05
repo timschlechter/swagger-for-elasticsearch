@@ -12,6 +12,10 @@ __Note:__ This plugin does not aim to be the ultimate management tool for Elasti
 Installation
 ------------
 ```
+# Elasticsearch 2.0:
+./bin/plugin --url https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch-2.0.0.zip --install swagger
+
+# Elasticsearch 1.7.3 and below:
 ./bin/plugin --url https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch.zip --install swagger
 ```
 
@@ -45,12 +49,6 @@ mvn package
 This will 
 * generate the release package in ```/target/releases```
 * put the Swagger UI in ```/target/elasticsearch/plugins/swagger/_site``` so it can be used during debugging
-
-### Run/debug ###
-```
-mvn exec:java
-```
-This will start Elasticsearch on [http://localhost:9200](http://localhost:9200). You can access the plugin by going to [http://localhost:9200/_plugin/swagger](http://localhost:9200/_plugin/swagger).
 
 Screenshots
 -----------

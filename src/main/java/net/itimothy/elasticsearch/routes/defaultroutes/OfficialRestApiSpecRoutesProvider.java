@@ -1,5 +1,6 @@
 package net.itimothy.elasticsearch.routes.defaultroutes;
 
+import com.google.common.base.Function;
 import net.itimothy.elasticsearch.restapispec.OfficialRestApiSpecDataProvider;
 import net.itimothy.elasticsearch.restapispec.model.Api;
 import net.itimothy.elasticsearch.restapispec.model.Param;
@@ -7,10 +8,9 @@ import net.itimothy.elasticsearch.routes.ModelsCatalog;
 import net.itimothy.elasticsearch.routes.RoutesProvider;
 import net.itimothy.elasticsearch.routes.model.*;
 import net.itimothy.util.CollectionUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.base.Function;
 import org.elasticsearch.common.inject.Inject;
-import org.elasticsearch.common.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

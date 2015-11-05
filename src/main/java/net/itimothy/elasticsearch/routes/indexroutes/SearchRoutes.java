@@ -1,11 +1,11 @@
 package net.itimothy.elasticsearch.routes.indexroutes;
 
+import com.google.common.collect.ImmutableList;
 import net.itimothy.elasticsearch.routes.model.HttpMethod;
 import net.itimothy.elasticsearch.routes.model.ParamType;
 import net.itimothy.elasticsearch.routes.model.Parameter;
 import net.itimothy.elasticsearch.routes.model.Route;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.collect.ImmutableList;
 import net.itimothy.elasticsearch.routes.ModelsCatalog;
 
 import java.util.List;

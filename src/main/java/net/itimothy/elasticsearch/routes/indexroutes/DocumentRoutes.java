@@ -1,11 +1,11 @@
 package net.itimothy.elasticsearch.routes.indexroutes;
 
+import com.google.common.base.Function;
 import net.itimothy.elasticsearch.routes.model.HttpMethod;
 import net.itimothy.elasticsearch.routes.model.Model;
 import net.itimothy.elasticsearch.routes.model.ParamType;
 import net.itimothy.elasticsearch.routes.model.Route;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.base.Function;
 import net.itimothy.elasticsearch.routes.ModelsCatalog;
 import net.itimothy.util.CollectionUtil;
 
