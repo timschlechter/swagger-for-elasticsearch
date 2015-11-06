@@ -19,7 +19,7 @@ sudo ./bin/plugin install https://github.com/timschlechter/swagger-for-elasticse
 ./bin/plugin --url https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch.zip --install swagger
 ```
 
-You can access the plugin by going to:
+After you restarted the node, you can access the plugin by going to:
 ```
 http:/localhost:9200/_plugin/swagger
 ```
