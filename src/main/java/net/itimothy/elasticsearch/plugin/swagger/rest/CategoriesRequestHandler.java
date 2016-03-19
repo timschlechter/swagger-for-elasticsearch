@@ -11,6 +11,8 @@ import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.rest.*;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +32,9 @@ public class CategoriesRequestHandler extends BaseRestHandler {
     }
 
     @Override
-    protected void handleRequest(RestRequest request, RestChannel channel, Client client) throws Exception {
+    protected void handleRequest(RestRequest request, final RestChannel channel, Client client) throws Exception {
         try {
-            List<String> result = new ArrayList<>();
+            final List<String> result = new ArrayList<>();
             for (Route route : defaultRoutesProvider.getRoutes()) {
                 if (!result.contains(route.getCategory())) {
                     result.add(route.getCategory());
@@ -46,15 +48,27 @@ public class CategoriesRequestHandler extends BaseRestHandler {
                 }
             });
 
-            GsonBuilder gson = new GsonBuilder();
-            gson.setPrettyPrinting();
+            AccessController.doPrivileged(
+                new PrivilegedAction<Void>() {
+                    public Void run() {
+                        GsonBuilder gson = new GsonBuilder();
+                        gson.setPrettyPrinting();
 
-            RestResponse response = new BytesRestResponse(OK, "application/json", gson.create().toJson(result));
+                        RestResponse response = new BytesRestResponse(OK, "application/json", gson.create().toJson(result));
 
-            response.addHeader("Access-Control-Allow-Methods", "GET");
+                        response.addHeader("Access-Control-Allow-Methods", "GET");
 
-            channel.sendResponse(response);
-        } catch (Exception ex) {
+                        channel.sendResponse(response);
+
+                        return null;
+                    }
+                }
+            );
+        } catch (
+            Exception ex
+            )
+
+        {
             logger.error(ex.getMessage(), ex);
             throw ex;
         }

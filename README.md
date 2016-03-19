@@ -12,6 +12,9 @@ __Note:__ This plugin does not aim to be the ultimate management tool for Elasti
 Installation
 ------------
 ```
+# Elasticsearch 2.2.1:
+sudo ./bin/plugin install https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch-2.2.1.zip
+
 # Elasticsearch 2.0:
 sudo ./bin/plugin install https://github.com/timschlechter/swagger-for-elasticsearch/raw/master/dist/swagger-for-elasticsearch-2.0.0.zip
 

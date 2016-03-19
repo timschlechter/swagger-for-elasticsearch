@@ -32,5 +32,10 @@
             <outputDirectory></outputDirectory>
             <filtered>true</filtered>
         </file>
+        <file>
+            <source>${basedir}/src/main/resources/plugin-security.policy</source>
+            <outputDirectory></outputDirectory>
+            <filtered>true</filtered>
+        </file>
     </files>
 </assembly>

@@ -37,3 +37,6 @@
 [submodule "rest-api-spec/2.1"]
 	path = rest-api-spec/2.1
 	url = https://github.com/elastic/elasticsearch
+[submodule "rest-api-spec/2.2"]
+	path = rest-api-spec/2.2
+	url = https://github.com/elastic/elasticsearch

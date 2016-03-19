@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -21,10 +23,10 @@ public class OfficialRestApiSpecDataProvider {
     // TODO: caching
 
     public Map<String, Api> getData(Version version) {
-        HashMap<String, Api> data = new HashMap<>();
+        final HashMap<String, Api> data = new HashMap<>();
 
         try {
-            Gson gson = new Gson();
+            final Gson gson = new Gson();
             final String path = String.format(
                 "rest-api-spec/%s.%s",
                 version.major,
@@ -33,9 +35,17 @@ public class OfficialRestApiSpecDataProvider {
             for (InputStream stream : getFiles(path)) {
                 final String json = IOUtils.toString(stream, "UTF-8");
                 try {
-                    RestApiSpecData restApiSpecData = gson.fromJson(json, RestApiSpecData.class);
-                    Map.Entry<String, Api> entry = restApiSpecData.entrySet().iterator().next();
-                    data.put(entry.getKey(), entry.getValue());
+                    AccessController.doPrivileged(
+                        new PrivilegedAction<Void>() {
+                            public Void run() {
+                                RestApiSpecData restApiSpecData = gson.fromJson(json, RestApiSpecData.class);
+                                Map.Entry<String, Api> entry = restApiSpecData.entrySet().iterator().next();
+                                data.put(entry.getKey(), entry.getValue());
+                                return null; // nothing to return
+                            }
+                        }
+                    );
+
                 } finally {
                     IOUtils.closeQuietly(stream);
                 }

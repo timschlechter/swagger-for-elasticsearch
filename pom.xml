@@ -31,10 +31,10 @@
 
         <project.name>Swagger for Elasticsearch</project.name>
         <project.description>Provides Swagger documentation for your Elasticsearch cluster</project.description>
-        <project.versions>2.0.0</project.versions>
+        <project.versions>2.2.1</project.versions>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <elasticsearch.version>2.0.0</elasticsearch.version>
+        <elasticsearch.version>2.2.1</elasticsearch.version>
         <elasticsearch.plugin.name>swagger</elasticsearch.plugin.name>
         <elasticsearch.plugin.site>true</elasticsearch.plugin.site>
         <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
@@ -323,6 +323,22 @@
                             <resources>
                                 <resource>
                                     <directory>${basedir}/rest-api-spec/2.1/rest-api-spec/src/main/resources/rest-api-spec/api</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-rest-api-spec-2.2</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/rest-api-spec/2.2/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/rest-api-spec/2.2/rest-api-spec/src/main/resources/rest-api-spec/api</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
