@@ -1,3 +1,5 @@
+__Note:__ I stopped maintaining this plugin since the breaking changes in the plugin model after/around version 2. I don't want to invest the time anymore keeping up with all these new changes, so I stopped. If you want to take over this repo to continue improving, please contact me.
+
 Swagger for Elasticsearch [![Build Status](https://travis-ci.org/timschlechter/swagger-for-elasticsearch.svg?branch=master)](https://travis-ci.org/timschlechter/swagger-for-elasticsearch)
 =========================
 Provides [Swagger](http://swagger.io/) documentation for your Elasticsearch cluster.
